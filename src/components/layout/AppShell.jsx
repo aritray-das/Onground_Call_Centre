@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 import './AppShell.css'
+import Dashboard from '../dashboard/Dashboard'
 
 /**
  * SECTION_META maps a nav item id to a human-readable heading and
@@ -11,7 +12,6 @@ import './AppShell.css'
  * placeholder JSX below with that component and remove its entry here.
  */
 const SECTION_META = {
-  'dashboard':        { heading: 'Dashboard',       desc: 'Your workspace overview will appear here.' },
   'plan-calls-to-make': { heading: 'Calls to make', desc: 'Your outbound call queue will appear here.' },
   'plan-incoming':    { heading: 'Incoming',         desc: 'Incoming call records will appear here.' },
   'plan-recent':      { heading: 'Recent',           desc: 'Recently completed calls will appear here.' },
@@ -53,14 +53,18 @@ function AppShell() {
         <TopBar />
 
         <main className="shell__content" id="main-content">
-          <div className="content-placeholder">
-            <h1 className="content-placeholder__heading">{section.heading}</h1>
-            <hr className="content-placeholder__divider" />
-            <p className="content-placeholder__sub">{section.desc}</p>
-            <p className="content-placeholder__hint">
-              Navigate using the sidebar to switch sections.
-            </p>
-          </div>
+          {activeId === 'dashboard' ? (
+            <Dashboard onNavigate={setActiveId} />
+          ) : (
+            <div className="content-placeholder">
+              <h1 className="content-placeholder__heading">{section.heading}</h1>
+              <hr className="content-placeholder__divider" />
+              <p className="content-placeholder__sub">{section.desc}</p>
+              <p className="content-placeholder__hint">
+                Navigate using the sidebar to switch sections.
+              </p>
+            </div>
+          )}
         </main>
       </div>
     </div>
