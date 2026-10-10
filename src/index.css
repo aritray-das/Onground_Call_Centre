@@ -158,10 +158,12 @@ body {
 }
 
 #root {
-  /* Full viewport — future layouts will use flex/grid within this container */
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+  /*
+   * AppShell sets its own height: 100svh on .shell.
+   * #root just needs to exist as a mounting point — no extra layout here.
+   */
+  height: 100svh;
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {

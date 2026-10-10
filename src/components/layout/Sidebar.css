@@ -1,0 +1,144 @@
+/*
+ * Sidebar.css — Scoped styles for the navigation sidebar.
+ *
+ * All values reference tokens from index.css.
+ * Width is set once here; AppShell offsets main content by the same amount.
+ */
+
+/* ── Sidebar container ─────────────────────────────────────────────── */
+.sidebar {
+  width: 200px;           /* fixed desktop width */
+  flex-shrink: 0;
+  background-color: var(--surface-nav);     /* dark green */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ── Brand / logo area ─────────────────────────────────────────────── */
+.sidebar__brand {
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar__brand-name {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--text-on-dark);
+  letter-spacing: 0.01em;
+  line-height: var(--leading-tight);
+}
+
+.sidebar__brand-sub {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Navigation list ───────────────────────────────────────────────── */
+.sidebar__nav {
+  flex: 1;
+  padding: var(--space-3) var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Individual nav item (button) ──────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  background: transparent;
+  border-radius: var(--border-radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: rgba(255, 255, 255, 0.65);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  line-height: var(--leading-tight);
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: var(--text-on-dark);
+}
+
+/* Active state — solid pill highlight */
+.nav-item--active {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--text-on-dark);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Expand/collapse arrow for Plan ───────────────────────────────── */
+.nav-item__arrow {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-item__arrow--open {
+  transform: rotate(90deg);
+}
+
+/* ── Sub-items (Plan children) ─────────────────────────────────────── */
+.nav-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: var(--space-3);  /* indent under Plan */
+  overflow: hidden;
+}
+
+.nav-subitem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px var(--space-3);
+  border: none;
+  background: transparent;
+  border-radius: var(--border-radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  color: rgba(255, 255, 255, 0.5);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  line-height: var(--leading-tight);
+}
+
+.nav-subitem:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.nav-subitem--active {
+  background-color: rgba(255, 255, 255, 0.10);
+  color: var(--text-on-dark);
+  font-weight: var(--weight-medium);
+}
+
+/* ── Thin leading line on sub-items ───────────────────────────────── */
+.nav-subitem::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin-right: var(--space-2);
+  flex-shrink: 0;
+}
+
+.nav-subitem--active::before {
+  background-color: rgba(255, 255, 255, 0.7);
+}

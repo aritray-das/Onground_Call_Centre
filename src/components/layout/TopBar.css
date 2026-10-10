@@ -1,0 +1,117 @@
+/*
+ * TopBar.css — Scoped styles for the top application bar.
+ *
+ * The bar shares the same dark-green direction as the sidebar but sits
+ * above the main content area, not above the sidebar itself.
+ * All values reference tokens from index.css.
+ */
+
+/* ── Bar container ─────────────────────────────────────────────────── */
+.topbar {
+  height: 44px;
+  background-color: var(--color-green-800);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-5);
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
+
+/* ── Left: brand label ─────────────────────────────────────────────── */
+.topbar__brand {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.03em;
+  flex: 1;            /* pushes right-side indicators to the end */
+}
+
+/* ── Right: indicator group ────────────────────────────────────────── */
+.topbar__indicators {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ── Notification badge ────────────────────────────────────────────── */
+.topbar__notification {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar__bell {
+  font-size: var(--text-md);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.topbar__badge {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  background-color: #e03c31;   /* red — intentional brand-independent value */
+  border-radius: 7px;
+  font-size: 9px;
+  font-weight: var(--weight-bold);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 1.5px solid var(--color-green-800);
+}
+
+/* ── Points / streak indicator ─────────────────────────────────────── */
+.topbar__points {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--border-radius-sm);
+  padding: 3px var(--space-2);
+}
+
+.topbar__points-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.topbar__points-value {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #f5a623;              /* amber — intentional */
+  line-height: 1;
+}
+
+.topbar__points-label {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+
+/* ── Avatar ────────────────────────────────────────────────────────── */
+.topbar__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-green-600);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  color: var(--text-on-dark);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  flex-shrink: 0;
+}
