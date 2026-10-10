@@ -655,7 +655,7 @@ export const PULSE_TASK_AGENTS = [
     name: 'Cross-sell Agent',
     description: 'Identifies cross-sell opportunities within the existing customer base and surfaces product recommendations during calls.',
     avatarEmoji: '🔀',
-    percentComplete: 68,
+    percentComplete: 24,
     isActive: true,
   },
   {
@@ -663,7 +663,7 @@ export const PULSE_TASK_AGENTS = [
     name: 'SOP Agent',
     description: 'Guides agents through Standard Operating Procedures in real time, ensuring compliance and consistent call quality.',
     avatarEmoji: '📋',
-    percentComplete: 82,
+    percentComplete: 61,
     isActive: true,
   },
   {
@@ -671,7 +671,7 @@ export const PULSE_TASK_AGENTS = [
     name: 'Lead Conversion Agent',
     description: 'Tracks lead progression from first contact to close, flags stalled leads, and recommends next-best actions.',
     avatarEmoji: '🎯',
-    percentComplete: 54,
+    percentComplete: 78,
     isActive: true,
   },
   {
@@ -688,9 +688,9 @@ export const PULSE_TASK_AGENTS = [
    19. PULSE_CHANNEL — Pulse team channel metadata
    ============================================================ */
 export const PULSE_CHANNEL = {
-  id: 'ch-bangalore-north',
-  name: 'Bangalore North',
-  description: 'Team channel for Bangalore North sales agents.',
+  id: 'ch-customer-discussions',
+  name: 'customer-discussions',
+  description: 'Channel for discussing customer interactions.',
   memberCount: 12,
   onlineCount: 7,
   unreadCount: 3,

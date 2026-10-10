@@ -1,0 +1,348 @@
+/*
+ * PulseHome.css — Styles for the Pulse Home view
+ */
+
+.pulse-home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Header ────────────────────────────────────────────────────────── */
+.pulse-header {
+  background: linear-gradient(135deg, var(--color-purple-800) 0%, var(--color-purple-900) 100%);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: 0 4px 12px rgba(107, 61, 187, 0.15);
+}
+
+.pulse-header__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pulse-header__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pulse-header__subtitle {
+  color: var(--color-purple-200);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--weight-bold);
+}
+
+.pulse-header__title {
+  color: var(--color-white);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+}
+
+.pulse-header__search {
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+}
+
+.pulse-header__search-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: 20px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  font-size: var(--text-sm);
+  outline: none;
+  transition: background-color 0.2s;
+}
+
+.pulse-header__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pulse-header__search-input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Main Layout ───────────────────────────────────────────────────── */
+.pulse-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .pulse-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pulse-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── Section Blocks ────────────────────────────────────────────────── */
+.pulse-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pulse-section__title {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--text-heading);
+}
+
+/* ── AvaniBot Card ─────────────────────────────────────────────────── */
+.pulse-avani {
+  background: linear-gradient(to bottom right, var(--surface-card), #f5f3fa);
+  border: 1px solid var(--color-purple-200);
+  border-left: 4px solid var(--color-purple-600);
+  padding: var(--space-5);
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pulse-avani__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pulse-avani__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-purple-900);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pulse-avani__status {
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  color: var(--color-purple-700);
+  background-color: var(--color-purple-100);
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+}
+
+.pulse-avani__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.pulse-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pulse-btn--primary {
+  background-color: var(--color-purple-600);
+  color: var(--color-white);
+}
+
+.pulse-btn--primary:hover {
+  background-color: var(--color-purple-700);
+}
+
+.pulse-btn--outline {
+  background-color: transparent;
+  border-color: var(--color-purple-600);
+  color: var(--color-purple-700);
+}
+
+.pulse-btn--outline:hover {
+  background-color: var(--color-purple-50);
+}
+
+.pulse-avani__demo-msg {
+  font-size: var(--text-xs);
+  color: var(--color-purple-600);
+  background-color: var(--color-purple-100);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* ── Grid Cards (Task/Custom/Role Agents) ──────────────────────────── */
+.pulse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.pulse-agent-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  padding: var(--space-4);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.pulse-agent-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.pulse-agent-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pulse-agent-card__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pulse-agent-card__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-md);
+  color: var(--text-primary);
+  font-weight: var(--weight-bold);
+}
+
+.pulse-agent-card__avatar--role {
+  background-color: var(--color-purple-100);
+  color: var(--color-purple-700);
+  font-size: var(--text-sm);
+}
+
+.pulse-agent-card__name {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  color: var(--text-heading);
+}
+
+.pulse-agent-card__percent {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--color-green-700);
+  background-color: var(--color-green-100);
+  padding: 2px 6px;
+  border-radius: 12px;
+}
+
+.pulse-agent-card__desc {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.pulse-agent-card__meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: var(--weight-bold);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ── Kudos & Channels ──────────────────────────────────────────────── */
+.pulse-side-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  padding: var(--space-5);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pulse-side-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pulse-side-card__title {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-md);
+  color: var(--text-heading);
+}
+
+.pulse-badge--new {
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  color: #b45309; /* amber-700 */
+  background-color: #fef3c7; /* amber-100 */
+  padding: 2px 6px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.pulse-kudos__message {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  font-style: italic;
+  border-left: 3px solid var(--color-green-500);
+  padding-left: var(--space-3);
+  margin: var(--space-2) 0;
+}
+
+.pulse-kudos__meta {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+}
+
+.pulse-channel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3);
+  background-color: var(--color-gray-50);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pulse-channel-row:hover {
+  background-color: var(--color-gray-100);
+}
+
+.pulse-channel-row__name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-purple-700);
+}
+
+.pulse-channel-row__count {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
