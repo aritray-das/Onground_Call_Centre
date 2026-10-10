@@ -4,6 +4,7 @@ import TopBar from './TopBar'
 import './AppShell.css'
 import Dashboard from '../dashboard/Dashboard'
 import CallsToMake from '../plan/CallsToMake'
+import Incoming from '../plan/Incoming'
 
 /**
  * SECTION_META maps a nav item id to a human-readable heading and
@@ -13,7 +14,6 @@ import CallsToMake from '../plan/CallsToMake'
  * placeholder JSX below with that component and remove its entry here.
  */
 const SECTION_META = {
-  'plan-incoming':    { heading: 'Incoming',         desc: 'Incoming call records will appear here.' },
   'plan-recent':      { heading: 'Recent',           desc: 'Recently completed calls will appear here.' },
   'plan-practise':    { heading: 'Practise a call',  desc: 'Call-practice simulator will appear here.' },
   'calendar':         { heading: 'Calendar',         desc: 'Your scheduling calendar will appear here.' },
@@ -57,6 +57,8 @@ function AppShell() {
             <Dashboard onNavigate={setActiveId} />
           ) : activeId === 'plan-calls-to-make' ? (
             <CallsToMake />
+          ) : activeId === 'plan-incoming' ? (
+            <Incoming />
           ) : (
             <div className="content-placeholder">
               <h1 className="content-placeholder__heading">{section.heading}</h1>

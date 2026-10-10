@@ -1,0 +1,193 @@
+/*
+ * Incoming.css — Styles for the incoming missed calls view
+ */
+
+.incoming-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Header ────────────────────────────────────────────────────────── */
+.incoming-header {
+  background-color: var(--surface-header);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.incoming-header__title {
+  color: var(--color-white);
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-1);
+}
+
+.incoming-header__subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--text-sm);
+}
+
+.incoming-summary {
+  display: flex;
+  gap: var(--space-8);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--space-4);
+}
+
+.incoming-summary__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.incoming-summary__val {
+  color: var(--color-white);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+}
+
+.incoming-summary__lbl {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  font-weight: var(--weight-bold);
+}
+
+/* ── Content Area ──────────────────────────────────────────────────── */
+.incoming-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.incoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ── Card ──────────────────────────────────────────────────────────── */
+.incoming-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.incoming-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.incoming-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.incoming-card__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.incoming-card__name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.incoming-card__name {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-base);
+  color: var(--text-heading);
+}
+
+.incoming-card__time {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #dc2626; /* red to indicate missed */
+  padding: 2px 6px;
+  border-radius: 12px;
+}
+
+.incoming-card__context {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.incoming-card__value {
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+  font-weight: var(--weight-medium);
+  display: inline-block;
+  background-color: var(--color-gray-100);
+  padding: 2px 6px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+/* ── Actions ───────────────────────────────────────────────────────── */
+.incoming-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 120px;
+}
+
+.incoming-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  border-radius: var(--border-radius-sm);
+  border: none;
+  background-color: var(--color-green-700);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.incoming-btn:hover {
+  background-color: var(--color-green-800);
+}
+
+.incoming-card__demo-msg {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background-color: var(--color-gray-100);
+  padding: 6px 8px;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+  font-weight: var(--weight-medium);
+}
+
+@media (max-width: 600px) {
+  .incoming-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .incoming-card__actions {
+    justify-content: flex-start;
+    margin-top: var(--space-2);
+  }
+}
