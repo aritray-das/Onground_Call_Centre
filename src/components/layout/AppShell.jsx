@@ -6,6 +6,7 @@ import Dashboard from '../dashboard/Dashboard'
 import CallsToMake from '../plan/CallsToMake'
 import Incoming from '../plan/Incoming'
 import Recent from '../plan/Recent'
+import Calendar from '../calendar/Calendar'
 
 /**
  * SECTION_META maps a nav item id to a human-readable heading and
@@ -16,7 +17,6 @@ import Recent from '../plan/Recent'
  */
 const SECTION_META = {
   'plan-practise':    { heading: 'Practise a call',  desc: 'Call-practice simulator will appear here.' },
-  'calendar':         { heading: 'Calendar',         desc: 'Your scheduling calendar will appear here.' },
   'pulse':            { heading: 'Pulse',            desc: 'Real-time pulse tracking will appear here.' },
 }
 
@@ -61,6 +61,8 @@ function AppShell() {
             <Incoming />
           ) : activeId === 'plan-recent' ? (
             <Recent />
+          ) : activeId === 'calendar' ? (
+            <Calendar />
           ) : (
             <div className="content-placeholder">
               <h1 className="content-placeholder__heading">{section.heading}</h1>
