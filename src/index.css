@@ -1,0 +1,195 @@
+/*
+ * index.css — Global design tokens and base reset
+ *
+ * This file defines all CSS custom properties (design tokens) for the
+ * On-Ground.ai Call Centre app. Every future component should reference
+ * these variables rather than using raw colour or size values.
+ *
+ * Sections:
+ *   1. Colour palette
+ *   2. Surface colours (backgrounds, borders)
+ *   3. Text colours
+ *   4. Spacing scale
+ *   5. Border-radius scale
+ *   6. Typography
+ *   7. Base reset
+ */
+
+/* ============================================================
+   1. Colour palette — brand hues
+   ============================================================ */
+:root {
+  /* Dark green — primary navigation shell */
+  --color-green-900: #0d2b1e;
+  --color-green-800: #164233;
+  --color-green-700: #1d5740;
+  --color-green-600: #236b4e;
+
+  /* Navy — planner headers, table headers */
+  --color-navy-900: #0c1329;
+  --color-navy-800: #152040;
+  --color-navy-700: #1e2e57;
+  --color-navy-600: #263a6e;
+
+  /* Purple — Pulse section accent */
+  --color-purple-700: #4f2d8a;
+  --color-purple-600: #6b3dbb;
+  --color-purple-500: #8b5cf6;
+  --color-purple-100: #ede9fe;
+
+  /* Neutral grays */
+  --color-gray-50:  #f8f9fa;
+  --color-gray-100: #f1f3f5;
+  --color-gray-200: #e9ecef;
+  --color-gray-300: #dee2e6;
+  --color-gray-400: #ced4da;
+  --color-gray-500: #adb5bd;
+  --color-gray-600: #868e96;
+  --color-gray-700: #495057;
+  --color-gray-800: #343a40;
+  --color-gray-900: #212529;
+
+  /* White */
+  --color-white: #ffffff;
+}
+
+/* ============================================================
+   2. Surface colours — backgrounds, cards, borders
+   ============================================================ */
+:root {
+  --surface-page:    var(--color-gray-50);   /* main page background */
+  --surface-card:    var(--color-white);     /* card / panel background */
+  --surface-nav:     var(--color-green-900); /* sidebar navigation shell */
+  --surface-header:  var(--color-navy-800);  /* planner / section headers */
+  --surface-pulse:   var(--color-purple-700);/* Pulse section background */
+  --surface-muted:   var(--color-gray-100);  /* subtle inset areas */
+
+  --border-color:    var(--color-gray-200);  /* default divider / border */
+  --border-strong:   var(--color-gray-300);  /* stronger border (tables) */
+  --border-radius-sm:  4px;
+  --border-radius-md:  6px;
+  --border-radius-lg: 10px;
+}
+
+/* ============================================================
+   3. Text colours
+   ============================================================ */
+:root {
+  --text-primary:   var(--color-gray-900); /* body copy */
+  --text-secondary: var(--color-gray-600); /* labels, meta, captions */
+  --text-muted:     var(--color-gray-500); /* placeholder, disabled */
+  --text-on-dark:   var(--color-white);    /* text on dark/coloured surfaces */
+  --text-heading:   var(--color-gray-900); /* h1–h3 */
+  --text-link:      var(--color-purple-600);
+}
+
+/* ============================================================
+   4. Spacing scale (multiples of 4 px)
+   ============================================================ */
+:root {
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+}
+
+/* ============================================================
+   5. Typography — system font stack, restrained scale
+   ============================================================ */
+:root {
+  /* System font stack — no external fonts needed */
+  --font-sans: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont,
+               Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+
+  /* Type scale — deliberately compact for a desktop dashboard */
+  --text-xs:   11px;
+  --text-sm:   12px;
+  --text-base: 13px;  /* default body */
+  --text-md:   14px;
+  --text-lg:   16px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  30px;
+
+  /* Line heights */
+  --leading-tight:  1.25;
+  --leading-normal: 1.45;
+  --leading-relaxed: 1.6;
+
+  /* Font weights */
+  --weight-normal:   400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+}
+
+/* ============================================================
+   6. Base reset
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%; /* respect user browser preference */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background-color: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  /* Full viewport — future layouts will use flex/grid within this container */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+  color: var(--text-heading);
+  line-height: var(--leading-tight);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+}
