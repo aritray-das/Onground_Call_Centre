@@ -6,7 +6,9 @@ import {
   TODAY_PROGRESS,
   PEOPLE_WAITING,
   EARNINGS,
-  TASKS
+  TASKS,
+  CHART_CALL_VOLUME,
+  CHART_CALL_QUALITY
 } from '../../data/mockData'
 
 /**
@@ -27,6 +29,9 @@ function Dashboard({ onNavigate }) {
       maximumFractionDigits: 0
     }).format(val)
   }
+
+  // Find the maximum value for the volume chart to scale bars appropriately
+  const maxVolume = Math.max(...CHART_CALL_VOLUME.map(d => d.calls), 1)
 
   return (
     <div className="dashboard">
@@ -181,6 +186,55 @@ function Dashboard({ onNavigate }) {
             </div>
           </section>
         </div>
+      </div>
+
+      {/* ── Charts ──────────────────────────────────────────────────────── */}
+      <div className="dashboard__charts">
+        {/* Calls Handled Chart */}
+        <section className="dash-card">
+          <header className="dash-card__header">
+            <h2 className="dash-card__title">Calls handled — last 7 days</h2>
+          </header>
+          <div className="chart-container" aria-label="Bar chart showing calls handled over the last 7 days">
+            {CHART_CALL_VOLUME.map((data, index) => (
+              <div key={index} className="chart-bar-group">
+                <div className="chart-bar-wrapper">
+                  <div 
+                    className="chart-bar chart-bar--green" 
+                    style={{ height: `${(data.calls / maxVolume) * 100}%` }}
+                    title={`${data.calls} calls`}
+                  >
+                    <div className="chart-tooltip">{data.calls}</div>
+                  </div>
+                </div>
+                <span className="chart-label">{data.day}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Call Quality Chart */}
+        <section className="dash-card">
+          <header className="dash-card__header">
+            <h2 className="dash-card__title">Call quality — last 7 days</h2>
+          </header>
+          <div className="chart-container" aria-label="Bar chart showing call quality score over the last 7 days">
+            {CHART_CALL_QUALITY.map((data, index) => (
+              <div key={index} className="chart-bar-group">
+                <div className="chart-bar-wrapper">
+                  <div 
+                    className="chart-bar chart-bar--blue" 
+                    style={{ height: `${data.score}%` }}
+                    title={`${data.score}%`}
+                  >
+                    <div className="chart-tooltip">{data.score}%</div>
+                  </div>
+                </div>
+                <span className="chart-label">{data.day}</span>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   )
