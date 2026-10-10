@@ -8,6 +8,7 @@ import Incoming from '../plan/Incoming'
 import Recent from '../plan/Recent'
 import Calendar from '../calendar/Calendar'
 import PulseHome from '../pulse/PulseHome'
+import PulseChannel from '../pulse/PulseChannel'
 
 /**
  * SECTION_META maps a nav item id to a human-readable heading and
@@ -65,6 +66,8 @@ function AppShell() {
             <Calendar />
           ) : activeId === 'pulse' ? (
             <PulseHome onNavigate={setActiveId} />
+          ) : activeId === 'pulse-channel' ? (
+            <PulseChannel onNavigate={setActiveId} />
           ) : (
             <div className="content-placeholder">
               <h1 className="content-placeholder__heading">{section.heading}</h1>
