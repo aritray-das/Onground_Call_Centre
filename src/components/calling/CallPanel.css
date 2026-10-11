@@ -1,0 +1,401 @@
+/*
+ * CallPanel.css — Scoped styles for the floating in-app voice call widget
+ *
+ * Utilizes global design tokens from src/index.css.
+ */
+
+.call-widget {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* ── Floating Action Button (FAB) ─────────────────────────────────── */
+.call-widget__fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--color-green-700);
+  color: var(--color-white);
+  border: none;
+  box-shadow: 0 4px 14px rgba(13, 43, 30, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.call-widget__fab:hover {
+  background-color: var(--color-green-600);
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(13, 43, 30, 0.45);
+}
+
+.call-widget__fab-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.call-widget__fab--incall {
+  background-color: #15803d;
+}
+
+.call-widget__fab--ringing {
+  background-color: #ea580c;
+  animation: call-fab-pulse 1s infinite alternate;
+}
+
+@keyframes call-fab-pulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+  }
+  to {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 10px rgba(234, 88, 12, 0);
+  }
+}
+
+.call-widget__fab-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  border: 2px solid var(--color-white);
+}
+
+/* ── Call Panel Window ────────────────────────────────────────────── */
+.call-panel {
+  position: absolute;
+  bottom: 64px;
+  right: 0;
+  width: 310px;
+  max-width: calc(100vw - 32px);
+  background-color: var(--color-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  animation: call-panel-fade-in 0.2s ease;
+}
+
+@keyframes call-panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.call-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-2);
+}
+
+.call-panel__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.call-panel__badge {
+  font-size: 14px;
+}
+
+.call-panel__title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--text-heading);
+}
+
+.call-panel__live-indicator {
+  font-size: 9px;
+  font-weight: var(--weight-bold);
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 1px 5px;
+  border-radius: 10px;
+}
+
+.call-panel__close-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.call-panel__close-btn:hover {
+  color: var(--text-heading);
+}
+
+.call-panel__note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: var(--leading-tight);
+}
+
+/* ── ID Section ───────────────────────────────────────────────────── */
+.call-panel__id-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.call-panel__label {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.call-panel__id-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: 6px var(--space-3);
+}
+
+.call-panel__id-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--color-green-800);
+  letter-spacing: 0.05em;
+}
+
+.call-btn--copy {
+  background: var(--color-white);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.call-btn--copy:hover {
+  background-color: var(--color-gray-50);
+  border-color: var(--border-strong);
+}
+
+/* ── Dial Form ────────────────────────────────────────────────────── */
+.call-panel__dial-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: var(--space-1);
+}
+
+.call-panel__dial-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.call-panel__input {
+  flex: 1;
+  padding: 6px var(--space-3);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  outline: none;
+}
+
+.call-panel__input:focus {
+  border-color: var(--color-green-600);
+}
+
+/* ── Common Buttons ───────────────────────────────────────────────── */
+.call-btn {
+  padding: 6px var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--border-radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.call-btn--start {
+  background-color: var(--color-green-700);
+  color: var(--color-white);
+  padding: 6px var(--space-4);
+}
+
+.call-btn--start:hover:not(:disabled) {
+  background-color: var(--color-green-600);
+}
+
+.call-btn--start:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Ringing Box ──────────────────────────────────────────────────── */
+.call-panel__ringing-box {
+  background-color: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.call-panel__ringing-icon {
+  font-size: 24px;
+  animation: call-ring-bounce 0.8s infinite;
+}
+
+@keyframes call-ring-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.call-panel__ringing-text {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.call-panel__ringing-caller {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  color: #c2410c;
+}
+
+.call-panel__ringing-actions {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.call-btn--answer {
+  flex: 1;
+  background-color: #15803d;
+  color: var(--color-white);
+}
+
+.call-btn--answer:hover {
+  background-color: #166534;
+}
+
+.call-btn--decline {
+  flex: 1;
+  background-color: #dc2626;
+  color: var(--color-white);
+}
+
+.call-btn--decline:hover {
+  background-color: #b91c1c;
+}
+
+/* ── Active / Calling Box ─────────────────────────────────────────── */
+.call-panel__active-box {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.call-panel__active-status {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: #166534;
+}
+
+.call-panel__timer {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: var(--weight-bold);
+  color: #14532d;
+  letter-spacing: 0.05em;
+}
+
+.call-panel__active-actions {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.call-btn--mute {
+  flex: 1;
+  background-color: var(--color-white);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+}
+
+.call-btn--muted {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.call-btn--hangup {
+  flex: 1;
+  background-color: #dc2626;
+  color: var(--color-white);
+}
+
+.call-btn--hangup:hover {
+  background-color: #b91c1c;
+}
+
+/* ── Error Box ────────────────────────────────────────────────────── */
+.call-panel__error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 11px;
+  border-radius: var(--border-radius-sm);
+  padding: 6px var(--space-2);
+  line-height: var(--leading-tight);
+}
+
+/* ── Phone width adjustments ──────────────────────────────────────── */
+@media (max-width: 600px) {
+  .call-widget {
+    bottom: var(--space-4);
+    right: var(--space-4);
+  }
+
+  .call-panel {
+    bottom: 58px;
+    right: 0;
+    width: calc(100vw - 32px);
+  }
+}

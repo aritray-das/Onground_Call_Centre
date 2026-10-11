@@ -19,6 +19,9 @@ function Incoming() {
     timeoutRef.current = setTimeout(() => {
       setDemoMessageId(null)
     }, 3000)
+
+    // Open in-app calling panel
+    window.dispatchEvent(new CustomEvent('open-call-panel'))
   }
 
   useEffect(() => {
