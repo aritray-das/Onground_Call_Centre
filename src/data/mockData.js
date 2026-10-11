@@ -35,6 +35,7 @@
 export const AGENT = {
   name: 'Arvind Rajan',
   initials: 'AR',
+  location: 'Koramangala',
   role: 'The Sleep Company',
   greeting: 'Good evening',   // static; swap for dynamic greeting in the UI layer
   team: 'Call Centre',

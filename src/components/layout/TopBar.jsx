@@ -1,4 +1,6 @@
+import { useState, useEffect, useRef } from 'react'
 import './TopBar.css'
+import { AGENT } from '../../data/mockData'
 
 /**
  * MOCK_TOPBAR_DATA — static display values.
@@ -10,7 +12,6 @@ const MOCK_TOPBAR_DATA = {
   notificationCount: 3,
   points: 1240,
   streak: 7,           // days
-  avatarInitials: 'AR',
 }
 
 /**
@@ -21,13 +22,61 @@ const MOCK_TOPBAR_DATA = {
  *   - A small brand label (left)
  *   - Notification bell with a red badge count
  *   - Points and streak indicator (amber)
- *   - Circular avatar with initials (right)
- *
- * No props needed for this task — all values come from MOCK_TOPBAR_DATA.
- * When real data is introduced, pass these as props or read from context.
+ *   - Circular avatar with initials (right) which toggles a profile dropdown
  */
 function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
-  const { notificationCount, points, streak, avatarInitials } = MOCK_TOPBAR_DATA
+  const { notificationCount, points, streak } = MOCK_TOPBAR_DATA
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [demoMessage, setDemoMessage] = useState(null)
+  const menuWrapperRef = useRef(null)
+  const toastTimeoutRef = useRef(null)
+
+  const handleItemClick = (label, message) => {
+    setIsMenuOpen(false)
+    setDemoMessage(message)
+
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current)
+    }
+
+    toastTimeoutRef.current = setTimeout(() => {
+      setDemoMessage(null)
+    }, 2500)
+  }
+
+  // Handle click outside and Escape key to close the dropdown
+  useEffect(() => {
+    if (!isMenuOpen) return
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsMenuOpen(false)
+      }
+    }
+
+    const handleClickOutside = (e) => {
+      if (menuWrapperRef.current && !menuWrapperRef.current.contains(e.target)) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isMenuOpen])
+
+  // Clear toast timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current)
+      }
+    }
+  }, [])
 
   return (
     <header className="topbar" role="banner">
@@ -74,17 +123,82 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
           </span>
         </div>
 
-        {/* Avatar */}
-        <div
-          className="topbar__avatar"
-          aria-label={`User avatar for ${avatarInitials}`}
-          title={avatarInitials}
-        >
-          {avatarInitials}
+        {/* Profile Avatar Button & Dropdown */}
+        <div className="topbar__profile-wrapper" ref={menuWrapperRef}>
+          <button
+            type="button"
+            className="topbar__avatar"
+            aria-haspopup="menu"
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            aria-label={`User profile menu for ${AGENT.name}`}
+            title={AGENT.name}
+          >
+            {AGENT.initials}
+          </button>
+
+          {isMenuOpen && (
+            <div className="topbar__dropdown" role="menu" aria-label="User profile menu">
+              {/* Header */}
+              <div className="topbar__dropdown-header">
+                <div className="topbar__dropdown-avatar" aria-hidden="true">
+                  {AGENT.initials}
+                </div>
+                <div className="topbar__dropdown-user">
+                  <span className="topbar__dropdown-name">{AGENT.name}</span>
+                  <span className="topbar__dropdown-sub">
+                    {AGENT.location} &middot; {AGENT.role}
+                  </span>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="topbar__dropdown-divider" role="separator" />
+
+              {/* Menu items */}
+              <div className="topbar__dropdown-menu">
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="topbar__dropdown-item"
+                  onClick={() => handleItemClick('Avatar', 'Demo: Avatar settings')}
+                >
+                  <span className="topbar__dropdown-item-icon" aria-hidden="true">👤</span>
+                  <span>Avatar</span>
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="topbar__dropdown-item"
+                  onClick={() => handleItemClick('Settings', 'Demo: Settings')}
+                >
+                  <span className="topbar__dropdown-item-icon" aria-hidden="true">⚙️</span>
+                  <span>Settings</span>
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="topbar__dropdown-item topbar__dropdown-item--logout"
+                  onClick={() => handleItemClick('Logout', 'Demo: Logged out')}
+                >
+                  <span className="topbar__dropdown-item-icon" aria-hidden="true">🚪</span>
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Floating Demo Toast */}
+      {demoMessage && (
+        <div className="topbar__demo-toast" role="status" aria-live="polite">
+          {demoMessage}
+        </div>
+      )}
     </header>
   )
 }
 
 export default TopBar
+
