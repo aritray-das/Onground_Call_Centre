@@ -8,10 +8,6 @@
   gap: var(--space-4);
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-6);
-  background-color: #f1f3f6;
-  border-radius: var(--border-radius-lg);
-  min-height: 100%;
 }
 
 /* ── Banner ────────────────────────────────────────────────────────── */

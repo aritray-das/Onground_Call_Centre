@@ -57,7 +57,7 @@
    2. Surface colours — backgrounds, cards, borders
    ============================================================ */
 :root {
-  --surface-page:    var(--color-gray-50);   /* main page background */
+  --surface-page:    #f1f3f6;                /* main page background (light grey) */
   --surface-card:    var(--color-white);     /* card / panel background */
   --surface-nav:     var(--color-green-900); /* sidebar navigation shell */
   --surface-header:  var(--color-navy-800);  /* planner / section headers */
