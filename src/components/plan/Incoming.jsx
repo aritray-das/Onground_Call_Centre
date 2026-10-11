@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Incoming.css'
 import { INCOMING_SUMMARY, INCOMING_CALLS } from '../../data/mockData'
+import { formatCurrency } from '../../utils/format'
 
 /**
  * Incoming
  * 
- * Planner view for incoming (missed) calls. Displays a summary and a list
- * of missed calls that may require follow-up. Includes a demo callback action.
+ * Planner view for incoming (missed) calls, ranked by expected value.
  */
 function Incoming() {
   const [demoMessageId, setDemoMessageId] = useState(null)
@@ -27,41 +27,40 @@ function Incoming() {
     }
   }, [])
 
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: INCOMING_SUMMARY.currency,
-      maximumFractionDigits: 0
-    }).format(val)
-  }
+  // Sort rows by expected value, highest first
+  const sortedCalls = [...INCOMING_CALLS].sort((a, b) => b.expectedValue - a.expectedValue)
 
   return (
     <div className="incoming-view">
+      {/* ── Navy Band ────────────────────────────────────────────────────── */}
+      <div className="planner-top-band">
+        <span className="planner-top-band__caption">Planner</span>
+        <span className="planner-top-band__title">Today's calling plan</span>
+      </div>
+
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="incoming-header">
-        <div>
-          <h1 className="incoming-header__title">Incoming calls</h1>
-          <p className="incoming-header__subtitle">Missed calls that may require follow-up.</p>
-        </div>
-        
-        <div className="incoming-summary">
-          <div className="incoming-summary__item">
-            <span className="incoming-summary__val">{INCOMING_SUMMARY.missedToday}</span>
-            <span className="incoming-summary__lbl">missed today</span>
-          </div>
-          <div className="incoming-summary__item">
-            <span className="incoming-summary__val">
-              {formatCurrency(INCOMING_SUMMARY.expectedValue)}
-            </span>
-            <span className="incoming-summary__lbl">expected value</span>
-          </div>
-        </div>
+        <h1 className="incoming-header__title">Missed calls</h1>
+        <p className="incoming-header__subtitle">
+          Ranked by expected value, so the highest-value leads come first
+        </p>
+      </div>
+
+      {/* ── Light Summary Strip ─────────────────────────────────────────── */}
+      <div className="incoming-summary-strip">
+        <span className="incoming-summary-strip__item">
+          <strong>{INCOMING_SUMMARY.missedToday}</strong> MISSED TODAY
+        </span>
+        <span className="incoming-summary-strip__divider" aria-hidden="true">&middot;</span>
+        <span className="incoming-summary-strip__item">
+          <strong>{formatCurrency(INCOMING_SUMMARY.expectedValue)}</strong> EXPECTED VALUE AT STAKE
+        </span>
       </div>
 
       {/* ── List Content ────────────────────────────────────────────────── */}
       <div className="incoming-content">
         <div className="incoming-list">
-          {INCOMING_CALLS.map((call) => (
+          {sortedCalls.map((call) => (
             <div key={call.id} className="incoming-card">
               <div className="incoming-card__avatar" aria-hidden="true">
                 {call.initials}
@@ -73,11 +72,6 @@ function Incoming() {
                   <span className="incoming-card__time">Missed: {call.time}</span>
                 </div>
                 <p className="incoming-card__context">{call.context}</p>
-                {call.expectedValue > 0 && (
-                  <div className="incoming-card__value">
-                    Expected Value: {formatCurrency(call.expectedValue)}
-                  </div>
-                )}
               </div>
 
               <div className="incoming-card__actions">
@@ -86,13 +80,19 @@ function Incoming() {
                     Demo: No call placed
                   </span>
                 ) : (
-                  <button 
-                    className="incoming-btn"
-                    onClick={() => handleCallback(call.id)}
-                    aria-label={`Call back ${call.callerName}`}
-                  >
-                    Call back
-                  </button>
+                  <>
+                    <span className="incoming-card__expected-val">
+                      {formatCurrency(call.expectedValue)} expected
+                    </span>
+                    <button 
+                      type="button"
+                      className="incoming-btn incoming-btn--green"
+                      onClick={() => handleCallback(call.id)}
+                      aria-label={`Call back ${call.callerName}`}
+                    >
+                      Call back
+                    </button>
+                  </>
                 )}
               </div>
             </div>

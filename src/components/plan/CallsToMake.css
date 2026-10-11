@@ -152,6 +152,20 @@
   border: 1px solid var(--border-color);
 }
 
+.planner-card__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+  margin-top: 2px;
+}
+
+.planner-card__chevron--expanded {
+  transform: rotate(180deg);
+}
+
 /* ── Card Expanded Details ─────────────────────────────────────────── */
 .planner-card__details {
   border-top: 1px solid var(--border-color);

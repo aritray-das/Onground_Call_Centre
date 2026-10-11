@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './Recent.css'
 import { RECENT_CALLS } from '../../data/mockData'
 
@@ -17,12 +17,16 @@ function Recent() {
 
   return (
     <div className="recent-view">
+      {/* ── Navy Band ────────────────────────────────────────────────────── */}
+      <div className="planner-top-band">
+        <span className="planner-top-band__caption">Planner</span>
+        <span className="planner-top-band__title">Today's calling plan</span>
+      </div>
+
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="recent-header">
         <h1 className="recent-header__title">Recent calls</h1>
-        <p className="recent-header__subtitle">
-          Your call history. Select a row to review details and outcomes.
-        </p>
+        <p className="recent-header__subtitle">Tap a call to review it</p>
       </div>
 
       {/* ── List Content ────────────────────────────────────────────────── */}

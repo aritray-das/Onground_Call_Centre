@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './CallsToMake.css'
-import { CALLS_TO_MAKE, EARNINGS } from '../../data/mockData'
+import { CALLS_TO_MAKE } from '../../data/mockData'
+import { formatCurrency } from '../../utils/format'
 
 const PAGE_SIZE = 5
 
@@ -55,20 +56,19 @@ function CallsToMake() {
     setExpandedId((prev) => (prev === id ? null : id))
   }
 
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: EARNINGS.currency,
-      maximumFractionDigits: 0
-    }).format(val)
-  }
 
   return (
     <div className="planner">
+      {/* ── Navy Band ────────────────────────────────────────────────────── */}
+      <div className="planner-top-band">
+        <span className="planner-top-band__caption">Planner</span>
+        <span className="planner-top-band__title">Today's calling plan</span>
+      </div>
+
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="planner__header">
         <h1 className="planner__title">Planned outgoing calls</h1>
-        <p className="planner__subtitle">Priority list scored by lead intent and product value.</p>
+        <p className="planner__subtitle">Ranked by score — tap a lead to see the full picture</p>
       </div>
 
       {/* ── List Content ────────────────────────────────────────────────── */}
@@ -106,6 +106,12 @@ function CallsToMake() {
                     <div className="planner-card__score-badge" title={`Intent Score: ${call.score}`}>
                       {call.score}
                     </div>
+                    <span 
+                      className={`planner-card__chevron ${isExpanded ? 'planner-card__chevron--expanded' : ''}`}
+                      aria-hidden="true"
+                    >
+                      &#9662;
+                    </span>
                   </div>
                 </button>
 

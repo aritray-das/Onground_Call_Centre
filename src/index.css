@@ -195,3 +195,29 @@ img,
 svg {
   display: block;
 }
+
+/* ── Planner Top Band (Shared across Plan pages) ───────────── */
+.planner-top-band {
+  background-color: var(--color-navy-900);
+  color: var(--color-white);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-1);
+}
+
+.planner-top-band__caption {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: var(--weight-bold);
+  color: #93c5fd;
+}
+
+.planner-top-band__title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: #ffffff;
+}
