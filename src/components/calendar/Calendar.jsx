@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import './Calendar.css'
 import { CALENDAR_META, CALENDAR_EVENTS } from '../../data/mockData'
 
@@ -113,9 +113,9 @@ function Calendar() {
     <div className="calendar-view">
       {/* ── Banner & Header ─────────────────────────────────────────────── */}
       <div className="calendar-banner">
-        <span className="calendar-banner__icon" aria-hidden="true">📅</span>
+        <span className="calendar-banner__icon" aria-hidden="true">ℹ️</span>
         <span className="calendar-banner__text">
-          <strong>Local Demo:</strong> This calendar is not connected to an external service.
+          Share visits, coaching sessions and meeting invites will show up here — and in your mailbox.
         </span>
       </div>
 
@@ -124,26 +124,43 @@ function Calendar() {
           <h1 className="calendar-header__title">Calendar</h1>
           <p className="calendar-header__subtitle">Schedule your callbacks and meetings.</p>
         </div>
-        <div className="calendar-header__controls">
-          <button className="calendar-header__btn" onClick={handlePrevMonth} aria-label="Previous month">
-            &larr; Prev
-          </button>
-          <button className="calendar-header__btn calendar-header__btn--today" onClick={handleToday}>
-            Today
-          </button>
-          <button className="calendar-header__btn" onClick={handleNextMonth} aria-label="Next month">
-            Next &rarr;
-          </button>
-        </div>
       </div>
 
       {/* ── Layout ──────────────────────────────────────────────────────── */}
       <div className="calendar-main">
         {/* Left Column: Grid */}
         <div className="calendar-grid-card">
-          <h2 className="calendar-grid-card__title">
-            {monthName} {currentYear}
-          </h2>
+          <div className="calendar-grid-card__header">
+            <h2 className="calendar-grid-card__title">
+              {monthName} {currentYear}
+            </h2>
+            <div className="calendar-grid-card__controls">
+              <button 
+                type="button"
+                className="calendar-btn" 
+                onClick={handlePrevMonth} 
+                aria-label="Previous month"
+              >
+                &larr; Prev
+              </button>
+              <button 
+                type="button"
+                className="calendar-btn calendar-btn--today" 
+                onClick={handleToday}
+              >
+                Today
+              </button>
+              <button 
+                type="button"
+                className="calendar-btn" 
+                onClick={handleNextMonth} 
+                aria-label="Next month"
+              >
+                Next &rarr;
+              </button>
+            </div>
+          </div>
+
           <div className="calendar-grid">
             {WEEKDAYS.map((day) => (
               <div key={day} className="calendar-grid__weekday">
@@ -158,14 +175,18 @@ function Calendar() {
 
               const dateStr = toDateString(currentYear, currentMonth, day)
               const isSelected = selectedDateStr === dateStr
+              const isToday = 
+                day === CALENDAR_META.highlightedDate && 
+                currentMonth === CALENDAR_META.month && 
+                currentYear === CALENDAR_META.year
               const dayHasEvents = hasEvents(day)
 
               return (
                 <button
                   key={`day-${day}`}
-                  className={`calendar-grid__day ${isSelected ? 'calendar-grid__day--selected' : ''}`}
+                  className={`calendar-grid__day ${isToday ? 'calendar-grid__day--today' : ''} ${isSelected ? 'calendar-grid__day--selected' : ''}`}
                   onClick={() => setSelectedDateStr(dateStr)}
-                  aria-label={`${dateStr}${dayHasEvents ? ' (has events)' : ''}`}
+                  aria-label={`${dateStr}${dayHasEvents ? ' (has events)' : ''}${isToday ? ' (today)' : ''}`}
                   aria-pressed={isSelected}
                 >
                   {day}
