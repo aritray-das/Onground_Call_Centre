@@ -1,17 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './PulseHome.css'
-import { 
-  PULSE_CUSTOM_AGENTS, 
-  PULSE_ROLE_AGENTS, 
-  PULSE_TASK_AGENTS, 
-  PULSE_CHANNEL, 
-  PULSE_KUDOS 
-} from '../../data/mockData'
+import { PULSE_KUDOS } from '../../data/mockData'
 
 /**
  * PulseHome
  * 
- * Hub for AI agents, team communication, and shoutouts.
+ * Knowledge hub and agent directory for The Sleep Company call centre.
  */
 function PulseHome({ onNavigate }) {
   const [demoAvaniMsg, setDemoAvaniMsg] = useState(null)
@@ -33,14 +27,41 @@ function PulseHome({ onNavigate }) {
     }
   }, [])
 
+  const taskAgentsList = [
+    {
+      id: 'cross-sell',
+      name: '# cross-sell-agent',
+      percent: '24%',
+      desc: 'Surfaces product add-ons and bundle recommendations during customer calls.',
+    },
+    {
+      id: 'sop',
+      name: '# sop-agent',
+      percent: '61%',
+      desc: 'Ensures compliance with The Sleep Company greeting and objection handling standards.',
+    },
+    {
+      id: 'lead-conversion',
+      name: '# lead-conversion-agent',
+      percent: '78%',
+      desc: 'Tracks lead progression and highlights high-urgency mattress purchase intent.',
+    },
+    {
+      id: 'capture',
+      name: '# capture-agent',
+      percent: '91%',
+      desc: 'Captures and structures customer order details and follow-up tasks automatically.',
+    },
+  ]
+
   return (
     <div className="pulse-home">
-      {/* ── Pulse Header ────────────────────────────────────────────────── */}
+      {/* ── Purple Header ────────────────────────────────────────────────── */}
       <div className="pulse-header">
         <div className="pulse-header__top">
           <div className="pulse-header__title-group">
-            <span className="pulse-header__subtitle">The Sleep Company &middot; Knowledge</span>
             <h1 className="pulse-header__title">Pulse</h1>
+            <span className="pulse-header__subtitle">The Sleep Company · Knowledge</span>
           </div>
         </div>
         <div className="pulse-header__search">
@@ -48,154 +69,136 @@ function PulseHome({ onNavigate }) {
             type="text" 
             className="pulse-header__search-input" 
             placeholder="Ask AvaniBot or search Pulse..."
-            aria-label="Search Pulse or ask AvaniBot"
+            aria-label="Ask AvaniBot or search Pulse"
           />
         </div>
       </div>
 
-      {/* ── Main Layout ─────────────────────────────────────────────────── */}
-      <div className="pulse-layout">
-        
-        {/* Left Column: Agents */}
-        <div className="pulse-col">
-          
-          {/* AvaniBot Card */}
-          <div className="pulse-avani">
-            <div className="pulse-avani__header">
-              <h2 className="pulse-avani__title">
-                🤖 AvaniBot
-              </h2>
-              <span className="pulse-avani__status">AGENTS ON</span>
-            </div>
-            
-            <div className="pulse-avani__actions">
-              {demoAvaniMsg ? (
-                <span className="pulse-avani__demo-msg" role="status" aria-live="polite">
-                  {demoAvaniMsg}
-                </span>
-              ) : (
-                <>
-                  <button 
-                    className="pulse-btn pulse-btn--primary"
-                    onClick={() => handleAvaniAction('Daily Brief')}
-                  >
-                    Daily Brief
-                  </button>
-                  <button 
-                    className="pulse-btn pulse-btn--outline"
-                    onClick={() => handleAvaniAction('Ask a question')}
-                  >
-                    Ask a question
-                  </button>
-                </>
-              )}
-            </div>
+      {/* ── AvaniBot Card ─────────────────────────────────────────────────── */}
+      <div className="pulse-avani">
+        <div className="pulse-avani__header">
+          <div className="pulse-avani__title-row">
+            <span className="pulse-avani__icon" aria-hidden="true">🤖</span>
+            <h2 className="pulse-avani__title">AvaniBot</h2>
           </div>
-
-          {/* Task Agents */}
-          <div className="pulse-section">
-            <h3 className="pulse-section__title">Task Agents</h3>
-            <div className="pulse-grid">
-              {PULSE_TASK_AGENTS.map((agent) => (
-                <div key={agent.id} className="pulse-agent-card">
-                  <div className="pulse-agent-card__header">
-                    <div className="pulse-agent-card__identity">
-                      <div className="pulse-agent-card__avatar" aria-hidden="true">
-                        {agent.avatarEmoji}
-                      </div>
-                      <span className="pulse-agent-card__name">{agent.name}</span>
-                    </div>
-                    {agent.percentComplete !== undefined && (
-                      <span className="pulse-agent-card__percent">{agent.percentComplete}%</span>
-                    )}
-                  </div>
-                  <p className="pulse-agent-card__desc">{agent.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Role Agents */}
-          <div className="pulse-section">
-            <h3 className="pulse-section__title">Role Agents</h3>
-            <div className="pulse-grid">
-              {PULSE_ROLE_AGENTS.map((agent) => (
-                <div key={agent.id} className="pulse-agent-card">
-                  <div className="pulse-agent-card__header">
-                    <div className="pulse-agent-card__identity">
-                      <div className="pulse-agent-card__avatar pulse-agent-card__avatar--role" aria-hidden="true">
-                        {agent.initials}
-                      </div>
-                      <span className="pulse-agent-card__name">{agent.name}</span>
-                    </div>
-                  </div>
-                  <p className="pulse-agent-card__desc">
-                    {agent.agentName} &middot; {agent.description}
-                  </p>
-                  <span className="pulse-agent-card__meta">Status: {agent.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Custom Agents */}
-          <div className="pulse-section">
-            <h3 className="pulse-section__title">Custom Agents</h3>
-            <div className="pulse-grid">
-              {PULSE_CUSTOM_AGENTS.map((agent) => (
-                <div key={agent.id} className="pulse-agent-card">
-                  <div className="pulse-agent-card__header">
-                    <div className="pulse-agent-card__identity">
-                      <div className="pulse-agent-card__avatar" aria-hidden="true">
-                        {agent.avatarEmoji}
-                      </div>
-                      <span className="pulse-agent-card__name">{agent.name}</span>
-                    </div>
-                  </div>
-                  <p className="pulse-agent-card__desc">{agent.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
+          <span className="pulse-avani__status">AGENTS ON</span>
         </div>
+        
+        <p className="pulse-avani__desc">
+          Ask me about anything happening in Pulse — daily briefs, action items, quick answers.
+        </p>
 
-        {/* Right Column: Channels & Kudos */}
-        <div className="pulse-col">
-          
-          {/* General Channel */}
-          <div className="pulse-side-card">
-            <h3 className="pulse-side-card__title">Channels</h3>
-            <button 
-              className="pulse-channel-row"
-              onClick={() => {
-                // If a channel view is implemented later (Task 11), it will route here.
-                // For now, it just logs or does a safe no-op if onNavigate isn't provided.
-                if (onNavigate) onNavigate('pulse-channel')
-              }}
-            >
-              <span className="pulse-channel-row__name"># {PULSE_CHANNEL.name}</span>
-              <span className="pulse-channel-row__count">{PULSE_CHANNEL.unreadCount} unread</span>
-            </button>
-          </div>
-
-          {/* Kudos */}
-          <div className="pulse-side-card">
-            <div className="pulse-side-card__header">
-              <h3 className="pulse-side-card__title">Recent Kudos</h3>
-              <span className="pulse-badge--new">New</span>
-            </div>
-            
-            <p className="pulse-kudos__message">"{PULSE_KUDOS.message}"</p>
-            
-            <div className="pulse-kudos__meta">
-              <span>To: <strong>{PULSE_KUDOS.receivedBy}</strong></span>
-              <span>From: {PULSE_KUDOS.givenBy}</span>
-            </div>
-          </div>
-
+        <div className="pulse-avani__actions">
+          {demoAvaniMsg ? (
+            <span className="pulse-avani__demo-msg" role="status" aria-live="polite">
+              {demoAvaniMsg}
+            </span>
+          ) : (
+            <>
+              <button 
+                type="button"
+                className="pulse-btn pulse-btn--primary"
+                onClick={() => handleAvaniAction('Daily Brief')}
+              >
+                Daily Brief
+              </button>
+              <button 
+                type="button"
+                className="pulse-btn pulse-btn--outline"
+                onClick={() => handleAvaniAction('Ask a question')}
+              >
+                Ask a question
+              </button>
+            </>
+          )}
         </div>
       </div>
+
+      {/* ── Single-Column Agent & Channel Directory ───────────────────────── */}
+      <div className="pulse-directory">
+        {/* CUSTOM AGENTS */}
+        <section className="pulse-group">
+          <h3 className="pulse-group__label">CUSTOM AGENTS</h3>
+          <div className="pulse-list-row pulse-list-row--static">
+            <span className="pulse-list-row__title">Custom Agents</span>
+            <span className="pulse-list-row__sep">—</span>
+            <span className="pulse-list-row__desc">Set up your own manager-friendly agent</span>
+          </div>
+        </section>
+
+        {/* ROLE AGENTS */}
+        <section className="pulse-group">
+          <h3 className="pulse-group__label">ROLE AGENTS</h3>
+          <button 
+            type="button"
+            className="pulse-list-row pulse-list-row--clickable"
+            onClick={() => onNavigate?.('pulse-channel')}
+            title="Open # callcentre-agent channel"
+          >
+            <div className="pulse-list-row__main">
+              <span className="pulse-list-row__tag"># callcentre-agent</span>
+              <span className="pulse-list-row__sep">—</span>
+              <span className="pulse-list-row__desc">Call Centre Agent</span>
+            </div>
+            <span className="pulse-list-row__arrow" aria-hidden="true">&rarr;</span>
+          </button>
+        </section>
+
+        {/* TASK AGENTS */}
+        <section className="pulse-group">
+          <h3 className="pulse-group__label">TASK AGENTS</h3>
+          <div className="pulse-task-list">
+            {taskAgentsList.map((task) => (
+              <div key={task.id} className="pulse-task-row">
+                <div className="pulse-task-row__info">
+                  <span className="pulse-task-row__name">{task.name}</span>
+                  <span className="pulse-task-row__desc">{task.desc}</span>
+                </div>
+                <span className="pulse-task-row__badge">{task.percent}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* GENERAL */}
+        <section className="pulse-group">
+          <h3 className="pulse-group__label">GENERAL</h3>
+          <button 
+            type="button"
+            className="pulse-list-row pulse-list-row--clickable"
+            onClick={() => onNavigate?.('pulse-channel')}
+            title="Open # customer-discussions channel"
+          >
+            <div className="pulse-list-row__main">
+              <span className="pulse-list-row__tag"># customer-discussions</span>
+              <span className="pulse-list-row__sep">—</span>
+              <span className="pulse-list-row__desc">Debated via WhatsApp Business</span>
+            </div>
+            <span className="pulse-list-row__arrow" aria-hidden="true">&rarr;</span>
+          </button>
+        </section>
+      </div>
+
+      {/* ── Amber Kudos Card ──────────────────────────────────────────────── */}
+      <section className="pulse-kudos-card">
+        <div className="pulse-kudos-card__header">
+          <div className="pulse-kudos-card__title-row">
+            <span aria-hidden="true">🏆</span>
+            <h3 className="pulse-kudos-card__title">Kudos</h3>
+          </div>
+          <span className="pulse-badge--new">NEW</span>
+        </div>
+        
+        <p className="pulse-kudos-card__message">"{PULSE_KUDOS.message}"</p>
+        
+        <div className="pulse-kudos-card__meta">
+          <span>To: <strong>{PULSE_KUDOS.receivedBy}</strong></span>
+          <span>&middot;</span>
+          <span>From: {PULSE_KUDOS.givenBy}</span>
+          <span>&middot;</span>
+          <span>{PULSE_KUDOS.timestamp}</span>
+        </div>
+      </section>
     </div>
   )
 }
