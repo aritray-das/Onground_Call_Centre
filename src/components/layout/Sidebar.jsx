@@ -41,7 +41,7 @@ const NAV_ITEMS = [
  * The sidebar does not own the selected state — AppShell does. This keeps
  * the sidebar "dumb" and easy to test or reuse.
  */
-function Sidebar({ activeId, onSelect }) {
+function Sidebar({ activeId, onSelect, isMobileNavOpen = false, onCloseMobileNav }) {
   // Track whether the Plan accordion is open.
   // Start open when a Plan child is already active.
   const planChildIds = NAV_ITEMS
@@ -58,10 +58,14 @@ function Sidebar({ activeId, onSelect }) {
 
   function handleItemClick(id) {
     onSelect(id)
+    onCloseMobileNav?.()
   }
 
   return (
-    <aside className="sidebar" aria-label="Main navigation">
+    <aside 
+      className={`sidebar ${isMobileNavOpen ? 'sidebar--mobile-open' : ''}`} 
+      aria-label="Main navigation"
+    >
       {/* ── Brand ──────────────────────────────────────────────── */}
       <div className="sidebar__brand">
         <div className="sidebar__brand-name">On-Ground.ai</div>

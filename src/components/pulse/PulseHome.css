@@ -12,13 +12,14 @@
 
 /* ── Header ────────────────────────────────────────────────────────── */
 .pulse-header {
-  background: linear-gradient(135deg, var(--color-purple-800) 0%, var(--color-purple-900) 100%);
+  background-color: var(--color-navy-800);
+  background: linear-gradient(135deg, var(--color-navy-800) 0%, var(--color-navy-900) 100%);
   padding: var(--space-6) var(--space-8);
   border-radius: var(--border-radius-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  box-shadow: 0 4px 12px rgba(107, 61, 187, 0.15);
+  box-shadow: 0 4px 12px rgba(12, 19, 41, 0.15);
 }
 
 .pulse-header__top {
@@ -34,7 +35,7 @@
 }
 
 .pulse-header__subtitle {
-  color: var(--color-purple-200);
+  color: var(--color-white);
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;

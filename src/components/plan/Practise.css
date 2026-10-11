@@ -1,0 +1,360 @@
+/*
+ * Practise.css — Styles for the Practise a Call training simulator
+ *
+ * Scoped to .practise-* classes to avoid style leaks.
+ * References global design tokens in src/index.css.
+ */
+
+.practise-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Header ────────────────────────────────────────────────────────── */
+.practise-header {
+  background-color: var(--surface-header);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.practise-header__title {
+  color: var(--color-white);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  margin-bottom: 2px;
+}
+
+.practise-header__subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--text-sm);
+}
+
+.practise-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px var(--space-3);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-purple-100);
+  font-size: var(--text-xs);
+  align-self: flex-start;
+}
+
+/* ── Scenario Selection Tabs ───────────────────────────────────────── */
+.practise-scenarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.practise-scenario-tab {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.practise-scenario-tab:hover {
+  border-color: var(--color-purple-500);
+  background-color: var(--surface-muted);
+}
+
+.practise-scenario-tab:focus-visible {
+  outline: 2px solid var(--color-purple-500);
+  outline-offset: 2px;
+}
+
+.practise-scenario-tab--active {
+  border-color: var(--color-purple-600);
+  background-color: var(--color-purple-100);
+  box-shadow: 0 2px 6px rgba(107, 61, 187, 0.1);
+}
+
+.practise-scenario-tab__tag {
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.practise-scenario-tab--active .practise-scenario-tab__tag {
+  color: var(--color-purple-700);
+}
+
+.practise-scenario-tab__title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-heading);
+}
+
+/* ── Main Simulator Card ───────────────────────────────────────────── */
+.practise-sim {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.practise-sim__customer {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  background-color: var(--surface-muted);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border-color);
+}
+
+.practise-sim__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-navy-700) 0%, var(--color-navy-900) 100%);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-md);
+  flex-shrink: 0;
+}
+
+.practise-sim__customer-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.practise-sim__customer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.practise-sim__customer-name {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--text-heading);
+}
+
+.practise-sim__persona-tag {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.practise-sim__prompt {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  line-height: var(--leading-relaxed);
+  font-style: italic;
+  margin-top: var(--space-2);
+}
+
+/* ── Options Area ──────────────────────────────────────────────────── */
+.practise-sim__options-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.practise-sim__options-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.practise-sim__options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.practise-option-btn {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.practise-option-btn:hover:not(:disabled) {
+  border-color: var(--color-purple-500);
+  background-color: var(--surface-page);
+}
+
+.practise-option-btn:focus-visible {
+  outline: 2px solid var(--color-purple-500);
+  outline-offset: 2px;
+}
+
+.practise-option-btn--selected {
+  border-color: var(--color-purple-600);
+  background-color: var(--color-purple-100);
+}
+
+.practise-option-btn__key {
+  font-weight: var(--weight-bold);
+  color: var(--color-purple-600);
+  flex-shrink: 0;
+  width: 20px;
+}
+
+/* ── Feedback Result Box ───────────────────────────────────────────── */
+.practise-feedback {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.practise-feedback__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.practise-feedback__score {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: #166534;
+}
+
+.practise-feedback__text {
+  font-size: var(--text-sm);
+  color: #14532d;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Action Buttons ────────────────────────────────────────────────── */
+.practise-sim__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.practise-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.practise-btn--primary {
+  background-color: var(--color-green-700);
+  color: var(--color-white);
+}
+
+.practise-btn--primary:hover {
+  background-color: var(--color-green-800);
+}
+
+.practise-btn--outline {
+  background-color: transparent;
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.practise-btn--outline:hover {
+  background-color: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+/* ── Accordion / Cheat Sheet ───────────────────────────────────────── */
+.practise-script {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.practise-script__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--surface-muted);
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--text-heading);
+  letter-spacing: 0.04em;
+  font-family: inherit;
+}
+
+.practise-script__panel {
+  padding: var(--space-4);
+  background-color: var(--surface-card);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .practise-scenarios {
+    grid-template-columns: 1fr;
+  }
+  .practise-header {
+    padding: var(--space-4);
+  }
+  .practise-sim {
+    padding: var(--space-4);
+  }
+}

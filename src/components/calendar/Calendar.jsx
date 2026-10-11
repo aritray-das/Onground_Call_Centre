@@ -100,7 +100,7 @@ function Calendar() {
   // Format a friendly date string for the details panel header
   const formatSelectedDateFriendly = () => {
     const [y, m, d] = selectedDateStr.split('-')
-    const dateObj = new Date(y, m - 1, d)
+    const dateObj = new Date(Number(y), Number(m) - 1, Number(d))
     return dateObj.toLocaleDateString('default', { 
       weekday: 'long', 
       month: 'long', 

@@ -249,3 +249,31 @@
   color: var(--text-secondary);
   font-weight: var(--weight-medium);
 }
+
+.planner-card__demo-msg {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background-color: var(--surface-muted);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* ── Responsive Behavior ───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .planner__header {
+    padding: var(--space-4);
+  }
+
+  .planner-card__main {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .planner-card__meta {
+    width: 100%;
+    justify-content: space-between;
+    padding-left: calc(40px + var(--space-3));
+  }
+}

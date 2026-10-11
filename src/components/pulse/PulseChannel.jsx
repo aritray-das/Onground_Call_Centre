@@ -11,10 +11,15 @@ function PulseChannel({ onNavigate }) {
   // We initialize the chat messages with mock data
   const [messages, setMessages] = useState(PULSE_CHAT.messages)
   const [inputText, setInputText] = useState('')
+  const messagesEndRef = useRef(null)
   
   // Local demo state for the pinned callback card actions
   const [pinnedStatus, setPinnedStatus] = useState(null)
   const pinnedTimeoutRef = useRef(null)
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   const handlePinnedAction = (action) => {
     setPinnedStatus(`Demo: ${action}`)
@@ -125,6 +130,7 @@ function PulseChannel({ onNavigate }) {
               </div>
             )
           })}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Composer */}

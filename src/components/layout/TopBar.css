@@ -18,13 +18,35 @@
   flex-shrink: 0;
 }
 
-/* ── Left: brand label ─────────────────────────────────────────────── */
+/* ── Left: brand label & mobile menu button ───────────────────────── */
+.topbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;            /* pushes right-side indicators to the end */
+}
+
+.topbar__menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--color-white);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px var(--space-1);
+  line-height: 1;
+  border-radius: var(--border-radius-sm);
+}
+
+.topbar__menu-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .topbar__brand {
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.03em;
-  flex: 1;            /* pushes right-side indicators to the end */
 }
 
 /* ── Right: indicator group ────────────────────────────────────────── */
@@ -115,3 +137,17 @@
   cursor: pointer;
   flex-shrink: 0;
 }
+
+/* ── Mobile Layout ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 var(--space-4);
+  }
+
+  .topbar__menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+

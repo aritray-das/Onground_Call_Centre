@@ -26,13 +26,24 @@ const MOCK_TOPBAR_DATA = {
  * No props needed for this task — all values come from MOCK_TOPBAR_DATA.
  * When real data is introduced, pass these as props or read from context.
  */
-function TopBar() {
+function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
   const { notificationCount, points, streak, avatarInitials } = MOCK_TOPBAR_DATA
 
   return (
     <header className="topbar" role="banner">
-      {/* ── Left: brand label ──────────────────────────────────── */}
-      <span className="topbar__brand">On-Ground.ai</span>
+      {/* ── Left: mobile menu toggle & brand label ─────────────── */}
+      <div className="topbar__left">
+        <button
+          type="button"
+          className="topbar__menu-btn"
+          onClick={onToggleMobileNav}
+          aria-label="Toggle navigation menu"
+          aria-expanded={isMobileNavOpen}
+        >
+          &#9776;
+        </button>
+        <span className="topbar__brand">On-Ground.ai</span>
+      </div>
 
       {/* ── Right: indicators ──────────────────────────────────── */}
       <div className="topbar__indicators">

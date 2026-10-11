@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './CallsToMake.css'
 import { CALLS_TO_MAKE, EARNINGS } from '../../data/mockData'
 
@@ -14,6 +14,33 @@ const PAGE_SIZE = 5
 function CallsToMake() {
   const [currentPage, setCurrentPage] = useState(1)
   const [expandedId, setExpandedId] = useState(null)
+  const [demoAction, setDemoAction] = useState({})
+  const timeoutsRef = useRef({})
+
+  const handleAction = (callId, actionLabel) => {
+    if (timeoutsRef.current[callId]) {
+      clearTimeout(timeoutsRef.current[callId])
+      delete timeoutsRef.current[callId]
+    }
+
+    setDemoAction((prev) => ({ ...prev, [callId]: actionLabel }))
+
+    timeoutsRef.current[callId] = setTimeout(() => {
+      setDemoAction((prev) => {
+        const next = { ...prev }
+        delete next[callId]
+        return next
+      })
+      delete timeoutsRef.current[callId]
+    }, 3000)
+  }
+
+  useEffect(() => {
+    return () => {
+      Object.values(timeoutsRef.current).forEach(clearTimeout)
+      timeoutsRef.current = {}
+    }
+  }, [])
 
   const totalPages = Math.ceil(CALLS_TO_MAKE.length / PAGE_SIZE)
   const startIndex = (currentPage - 1) * PAGE_SIZE
@@ -97,8 +124,28 @@ function CallsToMake() {
                     </div>
                     
                     <div className="planner-card__actions">
-                      <button className="planner-btn planner-btn--primary">Start Call</button>
-                      <button className="planner-btn planner-btn--secondary">Mark as Skipped</button>
+                      {demoAction[call.id] ? (
+                        <span className="planner-card__demo-msg" role="status" aria-live="polite">
+                          {demoAction[call.id]}
+                        </span>
+                      ) : (
+                        <>
+                          <button 
+                            type="button"
+                            className="planner-btn planner-btn--primary"
+                            onClick={() => handleAction(call.id, 'Demo: Simulated call (no real call placed)')}
+                          >
+                            Start Call
+                          </button>
+                          <button 
+                            type="button"
+                            className="planner-btn planner-btn--secondary"
+                            onClick={() => handleAction(call.id, 'Demo: Marked as skipped')}
+                          >
+                            Mark as Skipped
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}

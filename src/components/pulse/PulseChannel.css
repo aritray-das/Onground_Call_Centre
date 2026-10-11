@@ -13,13 +13,14 @@
 
 /* ── Header ────────────────────────────────────────────────────────── */
 .channel-header {
-  background: linear-gradient(135deg, var(--color-purple-800) 0%, var(--color-purple-900) 100%);
+  background-color: var(--color-navy-800);
+  background: linear-gradient(135deg, var(--color-navy-800) 0%, var(--color-navy-900) 100%);
   padding: var(--space-4) var(--space-6);
   border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  box-shadow: 0 2px 8px rgba(107, 61, 187, 0.15);
+  box-shadow: 0 2px 8px rgba(12, 19, 41, 0.15);
 }
 
 .channel-header__back-btn {
@@ -53,7 +54,7 @@
 }
 
 .channel-header__subtitle {
-  color: var(--color-purple-200);
+  color: var(--color-white);
   font-size: var(--text-xs);
 }
 

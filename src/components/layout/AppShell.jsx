@@ -6,73 +6,75 @@ import Dashboard from '../dashboard/Dashboard'
 import CallsToMake from '../plan/CallsToMake'
 import Incoming from '../plan/Incoming'
 import Recent from '../plan/Recent'
+import Practise from '../plan/Practise'
 import Calendar from '../calendar/Calendar'
 import PulseHome from '../pulse/PulseHome'
 import PulseChannel from '../pulse/PulseChannel'
 
 /**
- * SECTION_META maps a nav item id to a human-readable heading and
- * a short description shown in the placeholder content area.
- *
- * When a real page component is ready for a section, replace the
- * placeholder JSX below with that component and remove its entry here.
- */
-const SECTION_META = {
-  'plan-practise':    { heading: 'Practise a call',  desc: 'Call-practice simulator will appear here.' },
-}
-
-/**
  * AppShell
  *
- * The root layout component. It owns the single piece of shared state:
- *   activeId — which navigation item is currently selected.
- *
- * It renders:
- *   <Sidebar>   — left column, receives activeId + onSelect callback
- *   <TopBar>    — fixed bar at the top of the right column
- *   placeholder — simple heading + description for the selected section
- *
- * When real page components are built, they replace the placeholder
- * inside shell__content, keyed on activeId.
+ * The root layout component. It owns shared state for active navigation
+ * and mobile sidebar drawer visibility.
  */
 function AppShell() {
   // Start on Dashboard by default.
   const [activeId, setActiveId] = useState('dashboard')
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
-  const section = SECTION_META[activeId] ?? {
-    heading: activeId,
-    desc: 'Content for this section is coming soon.',
+  const handleSelectNav = (id) => {
+    setActiveId(id)
+    setIsMobileNavOpen(false)
   }
 
   return (
     <div className="shell">
-      {/* ── Sidebar — left fixed column ──────────────────────── */}
-      <Sidebar activeId={activeId} onSelect={setActiveId} />
+      {/* ── Mobile Backdrop ──────────────────────────────────── */}
+      {isMobileNavOpen && (
+        <div 
+          className="shell__mobile-backdrop" 
+          onClick={() => setIsMobileNavOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* ── Sidebar — left navigation column ─────────────────── */}
+      <Sidebar 
+        activeId={activeId} 
+        onSelect={handleSelectNav} 
+        isMobileNavOpen={isMobileNavOpen}
+        onCloseMobileNav={() => setIsMobileNavOpen(false)}
+      />
 
       {/* ── Right column: topbar + scrollable content ────────── */}
       <div className="shell__body">
-        <TopBar />
+        <TopBar 
+          isMobileNavOpen={isMobileNavOpen}
+          onToggleMobileNav={() => setIsMobileNavOpen((prev) => !prev)} 
+        />
 
         <main className="shell__content" id="main-content">
           {activeId === 'dashboard' ? (
-            <Dashboard onNavigate={setActiveId} />
+            <Dashboard onNavigate={handleSelectNav} />
           ) : activeId === 'plan-calls-to-make' ? (
             <CallsToMake />
           ) : activeId === 'plan-incoming' ? (
             <Incoming />
           ) : activeId === 'plan-recent' ? (
             <Recent />
+          ) : activeId === 'plan-practise' ? (
+            <Practise />
           ) : activeId === 'calendar' ? (
             <Calendar />
           ) : activeId === 'pulse' ? (
-            <PulseHome onNavigate={setActiveId} />
+            <PulseHome onNavigate={handleSelectNav} />
           ) : activeId === 'pulse-channel' ? (
-            <PulseChannel onNavigate={setActiveId} />
+            <PulseChannel onNavigate={handleSelectNav} />
           ) : (
             <div className="content-placeholder">
-              <h1 className="content-placeholder__heading">{section.heading}</h1>
+              <h1 className="content-placeholder__heading">{activeId}</h1>
               <hr className="content-placeholder__divider" />
-              <p className="content-placeholder__sub">{section.desc}</p>
+              <p className="content-placeholder__sub">Content for this section is coming soon.</p>
               <p className="content-placeholder__hint">
                 Navigate using the sidebar to switch sections.
               </p>

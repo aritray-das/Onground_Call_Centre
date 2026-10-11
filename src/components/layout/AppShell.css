@@ -65,3 +65,24 @@
   font-size: var(--text-sm);
   color: var(--text-muted);
 }
+
+/* ── Mobile Backdrop & Responsive Layout ───────────────────────────── */
+.shell__mobile-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .shell__mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    background-color: rgba(12, 19, 41, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .shell__content {
+    padding: var(--space-4);
+  }
+}
