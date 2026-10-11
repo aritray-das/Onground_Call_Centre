@@ -1,102 +1,109 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './Practise.css'
 
 const SCENARIOS = [
   {
     id: 'sc-1',
-    tag: 'Cost Objection',
-    title: 'Term Insurance Cost Objection',
+    tag: 'Price Objection',
+    title: 'Competitor Price Objection',
     customerName: 'Rajesh K. (Simulated)',
     initials: 'RK',
     persona: 'Price-sensitive buyer',
     prompt:
-      '"₹18,000 annually for a 1 Cr cover feels too high. A competitor quoted me ₹14,500 online. Why shouldn\'t I just go with them?"',
+      '"₹9,490 for the Ortho GRID mattress feels steep. A local brand online is offering a memory foam mattress for ₹6,500. Why should I pay more for yours?"',
     talkingPoints:
-      'Emphasize claim settlement ratio (98.4%), 24/7 dedicated claims manager, cashless hospicash rider, and no-dispute clause after 3 years.',
+      'Highlight patented SmartGRID technology that does not sink or trap body heat like traditional foam, 2,500+ air channels for cooling, ergonomic spine alignment, and zero-sag durability.',
     options: [
       {
         id: 'opt-1',
-        text: 'Acknowledge the price difference, highlight our 98.4% claim settlement ratio and dedicated claims concierges who handle hospital visits.',
+        text: 'Acknowledge the price difference, explain that cheap foam traps body heat and sags within 2 years, whereas our patented SmartGRID offers Japanese polymer tech with 2,500+ air channels and zero-sag spine support.',
         score: '96 / 100',
         feedback:
-          'Excellent! Builds confidence without bashing competitors and anchors on peace of mind during actual claims.',
+          'Excellent! Builds value through product differentiation, cooling comfort, and durability rather than just discounting.',
       },
       {
         id: 'opt-2',
-        text: 'Offer to immediately downgrade the sum assured to ₹75 Lakhs to beat the competitor\'s price.',
-        score: '58 / 100',
+        text: 'Immediately offer an unauthorized 30% discount coupon to undercut the competitor and close the sale right now.',
+        score: '48 / 100',
         feedback:
-          'Sub-optimal: Reduces customer protection prematurely before demonstrating why the higher tier adds long-term security.',
+          'Poor approach: Erodes brand equity and margins without explaining why SmartGRID technology is superior.',
       },
       {
         id: 'opt-3',
-        text: 'Explain that cheaper online policies often include critical illness exclusions and claim paperwork delays.',
-        score: '78 / 100',
+        text: 'Explain that mattresses affect back health for 8 hours daily, and offer an easy no-cost EMI plan (₹1,580/mo) to make the quality difference affordable.',
+        score: '86 / 100',
         feedback:
-          'Good points, but make sure to substantiate policy wording differences constructively rather than sounding defensive.',
+          'Strong consultative response! Reframes cost as daily health investment and lowers the entry barrier with EMI.',
       },
     ],
   },
   {
     id: 'sc-2',
     tag: 'Product Comparison',
-    title: 'ULIP Lock-in vs Mutual Funds',
+    title: 'Memory Foam vs Pocket Spring vs SmartGRID',
     customerName: 'Vikram D. (Simulated)',
     initials: 'VD',
-    persona: 'Analytical investor',
+    persona: 'Analytical buyer',
     prompt:
-      '"Why lock my money in a ULIP for 5 to 10 years when I can get better liquidity and similar market returns in equity mutual funds?"',
+      '"I am confused between traditional memory foam, pocket spring, and your SmartGRID. How is the GRID actually different from standard memory foam?"',
     talkingPoints:
-      'Highlight dual benefit of life cover + market-linked growth, zero-tax maturity proceeds (Section 10(10D) limits), and free fund switching without capital gains taxes.',
+      'Explain hyper-elastic polymer grid mechanics: adapts dynamically to shoulders and hips without sinking or trapping heat, and isolates motion better than springs without squeaking or metal coils.',
     options: [
       {
         id: 'opt-1',
-        text: 'Focus on tax efficiency: Explain tax-free fund switching between debt and equity, and the built-in term insurance safety net.',
-        score: '94 / 100',
+        text: 'Explain the core difference: Memory foam collapses and traps body heat, while pocket springs bounce; SmartGRID is hyper-elastic polymer that isolates motion, cushions pressure points, and stays cool.',
+        score: '95 / 100',
         feedback:
-          'Outstanding! The tax-free switching benefit directly solves analytical customer comparison questions.',
+          'Outstanding! Clear breakdown of material differences that directly addresses the customer\'s technical curiosity.',
       },
       {
         id: 'opt-2',
-        text: 'Tell them mutual funds have higher fund management fees and are riskier than insurance.',
-        score: '45 / 100',
+        text: 'Tell the customer that spring and memory foam are obsolete technologies and only SmartGRID is worth buying.',
+        score: '52 / 100',
         feedback:
-          'Inaccurate: Regulated mutual fund expense ratios are very competitive. Focus on insurance plus tax-free switching advantages instead.',
+          'Too dismissive: Sounding condescending toward other materials can alienate customers who currently own them.',
       },
       {
         id: 'opt-3',
-        text: 'Recommend splitting the portfolio between a pure term plan and liquid mutual funds if lock-in is a primary concern.',
-        score: '84 / 100',
+        text: 'Offer a personalized firmness recommendation based on their sleeping position (side/back) and explain how Ortho GRID aligns the spine.',
+        score: '88 / 100',
         feedback:
-          'Consultative approach! Shows transparency and builds strong advisor credibility.',
+          'Great consultative questioning! Connects product mechanics to the customer\'s personal sleep habits.',
       },
     ],
   },
   {
     id: 'sc-3',
-    tag: 'Network Reassurance',
-    title: 'Hospital Cashless Network Coverage',
+    tag: 'Trial & Warranty',
+    title: '100-Night Trial & Warranty Reassurance',
     customerName: 'Ananya M. (Simulated)',
     initials: 'AM',
-    persona: 'Family caregiver',
+    persona: 'Cautious first-time buyer',
     prompt:
-      '"My parents live in Chennai. How do I know our nearby multi-specialty hospitals are actually cashless under this floater policy?"',
+      '"Buying a mattress online without lying on it first feels risky. What happens if I wake up with back stiffness after two weeks?"',
     talkingPoints:
-      'Explain 10,000+ cashless network hospitals, instant e-card pre-authorization within 60 minutes, and reimbursement fallback with 5-day SLA.',
+      'Highlight our 100-night risk-free trial with hassle-free pickup and 100% refund, plus 10-year warranty against sagging (>1 inch). Mention that the body typically takes 2-3 weeks to adapt to orthopaedic support.',
     options: [
       {
         id: 'opt-1',
-        text: 'Share that over 240 premier hospitals in Chennai are in-network with a 60-minute cashless approval guarantee, and offer to look up specific hospitals together.',
+        text: 'Reassure them with our 100-Night Risk-Free Trial: test it at home, and if not completely satisfied, we provide 100% money back with free doorstep pickup, backed by a 10-year warranty.',
         score: '98 / 100',
         feedback:
-          'Top tier! Direct, reassuring, and proactively offers to check specific hospitals to remove doubt.',
+          'Top tier! Direct, reassuring, and completely removes purchase risk with the 100-night trial.',
       },
       {
         id: 'opt-2',
-        text: 'Assure them that almost all hospitals accept this insurance, so they don\'t need to worry about the list.',
-        score: '50 / 100',
+        text: 'Assure them that nobody ever returns our mattresses because the SmartGRID is universally comfortable for everyone.',
+        score: '45 / 100',
         feedback:
-          'Risky: Vague generalizations can lead to unpleasant surprises during hospital admissions. Always verify network lists.',
+          'Overpromising: Avoid making unrealistic absolute claims; customers trust clear return and trial policies more.',
+      },
+      {
+        id: 'opt-3',
+        text: 'Explain the 3-week spine adjustment period and guide them through our warranty claim process and sleep specialist support line.',
+        score: '85 / 100',
+        feedback:
+          'Thoughtful and educational! Sets realistic expectations for orthopaedic alignment.',
       },
     ],
   },
@@ -130,12 +137,18 @@ function Practise() {
 
   return (
     <div className="practise-view">
+      {/* ── Navy Band ────────────────────────────────────────────────────── */}
+      <div className="planner-top-band">
+        <span className="planner-top-band__caption">Planner</span>
+        <span className="planner-top-band__title">Today's calling plan</span>
+      </div>
+
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="practise-header">
         <div>
           <h1 className="practise-header__title">Practise a call</h1>
           <p className="practise-header__subtitle">
-            Sharpen objection handling, product pitches, and claim explanations in a simulated environment.
+            Sharpen objection handling, product pitches, and sleep consultations in a simulated environment.
           </p>
         </div>
         <div className="practise-banner">
