@@ -292,11 +292,20 @@
   cursor: pointer;
   border-color: var(--border-color);
   background-color: var(--surface-card);
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
 }
 
 .task-box--actionable:hover {
   box-shadow: var(--shadow);
+  border-color: var(--color-purple-500);
+}
+
+.task-box--actionable:focus-visible {
+  outline: 2px solid var(--color-purple-500);
+  outline-offset: 2px;
 }
 
 .task-box__val {

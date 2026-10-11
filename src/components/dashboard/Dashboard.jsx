@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Dashboard.css'
+import LeadsModal from '../leads/LeadsModal'
 import {
   AGENT,
   DASHBOARD_KPI,
@@ -8,7 +9,8 @@ import {
   EARNINGS,
   TASKS,
   CHART_CALL_VOLUME,
-  CHART_CALL_QUALITY
+  CHART_CALL_QUALITY,
+  LEADS
 } from '../../data/mockData'
 
 /**
@@ -21,6 +23,8 @@ import {
  *   onNavigate: function(id: string) - Callback to switch navigation sections
  */
 function Dashboard({ onNavigate }) {
+  const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false)
+
   // Simple formatter for currency values based on mock data's currency settings
   const formatCurrency = (val) => {
     return new Intl.NumberFormat('en-IN', {
@@ -131,19 +135,19 @@ function Dashboard({ onNavigate }) {
                 <span className="task-box__val">{TASKS.callbacks}</span>
                 <span className="task-box__lbl">Callbacks</span>
               </div>
-              <div 
+              <button 
+                type="button"
                 className="task-box task-box--actionable" 
-                onClick={() => {
-                  /* Prepared for later task */
-                  console.log('Leads modal not yet implemented')
-                }}
-                title="View Hot Leads (Coming soon)"
+                onClick={() => setIsLeadsModalOpen(true)}
+                title="View Hot Leads"
+                aria-haspopup="dialog"
+                aria-expanded={isLeadsModalOpen}
               >
                 <span className="task-box__val" style={{ color: 'var(--color-purple-600)' }}>
                   {TASKS.hotLeads}
                 </span>
                 <span className="task-box__lbl">Hot Leads</span>
-              </div>
+              </button>
               <div className="task-box">
                 <span className="task-box__val">{TASKS.outcomes}</span>
                 <span className="task-box__lbl">Outcomes</span>
@@ -236,6 +240,13 @@ function Dashboard({ onNavigate }) {
           </div>
         </section>
       </div>
+
+      {/* ── Leads Inspection Modal ──────────────────────────────────────── */}
+      <LeadsModal 
+        isOpen={isLeadsModalOpen} 
+        onClose={() => setIsLeadsModalOpen(false)} 
+        leads={LEADS.slice(0, 5)} 
+      />
     </div>
   )
 }
