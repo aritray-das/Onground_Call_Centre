@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './LeadsModal.css'
-import { LEADS, EARNINGS } from '../../data/mockData'
+import { LEADS } from '../../data/mockData'
+import { formatCurrency } from '../../utils/format'
 
 /**
  * LeadsModal
@@ -16,17 +17,16 @@ import { LEADS, EARNINGS } from '../../data/mockData'
  */
 function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [expandedIcp, setExpandedIcp] = useState(false)
-  const [expandedHistory, setExpandedHistory] = useState(false)
+  const [expandedIcp, setExpandedIcp] = useState(true)
+  const [expandedHistory, setExpandedHistory] = useState(true)
   const [expandedSignals, setExpandedSignals] = useState(true)
 
   const modalRef = useRef(null)
   const closeButtonRef = useRef(null)
 
-  // Focus close button and reset to first lead on mount/open
+  // Focus close button on mount/open
   useEffect(() => {
     if (isOpen) {
-      setCurrentIndex(0)
       closeButtonRef.current?.focus()
     }
   }, [isOpen])
@@ -75,24 +75,13 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
     }
   }
 
-  const formatCurrency = (val) => {
-    if (typeof val !== 'number') return '—'
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: EARNINGS?.currency || 'INR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
-
   const getInterestText = (lead) => {
     if (!lead) return ''
-    if (lead.company) {
-      // Matches assignment brief example: "Interested: Ortho GRID"
-      const cleanCompany = lead.company.replace(/\s+(Pvt\.?\s*Ltd\.?|LLC|Inc\.?)/i, '').trim()
-      return `Interested: ${cleanCompany}`
+    if (lead.product && typeof lead.value === 'number') {
+      return `Interested: ${lead.product}, ${formatCurrency(lead.value)}`
     }
-    if (lead.interest) return lead.interest
     if (lead.product) return `Interested: ${lead.product}`
+    if (lead.interest) return lead.interest
     return null
   }
 
@@ -113,15 +102,31 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
         {/* ── Purple Header ────────────────────────────────────────────── */}
         <header className="leads-modal__header">
           <div className="leads-modal__header-left">
-            <h2 id="leads-modal-title" className="leads-modal__title">Leads</h2>
-            <span className="leads-modal__counter-badge" aria-label={`Lead ${currentIndex + 1} of ${safeLeads.length}`}>
-              Lead {currentIndex + 1} of {safeLeads.length}
-            </span>
-            {currentLead?.timeRemaining && (
-              <span className="leads-modal__countdown" title="Time remaining">
-                <span aria-hidden="true">⏱</span> {currentLead.timeRemaining} left
+            <div className="leads-modal__header-title-row">
+              <h2 id="leads-modal-title" className="leads-modal__title">Leads</h2>
+              <span className="leads-modal__counter-badge" aria-label={`Lead ${currentIndex + 1} of ${safeLeads.length}`}>
+                Lead {currentIndex + 1} of {safeLeads.length}
               </span>
-            )}
+              {currentLead?.timeRemaining && (
+                <span className="leads-modal__countdown" title="Time remaining">
+                  <span aria-hidden="true">⏱</span> {currentLead.timeRemaining} left
+                </span>
+              )}
+            </div>
+            {/* Progress dots row under the title */}
+            <div className="leads-modal__dots" role="tablist" aria-label="Lead selection progress dots">
+              {safeLeads.map((lead, idx) => (
+                <button
+                  key={lead.id || idx}
+                  type="button"
+                  role="tab"
+                  aria-selected={idx === currentIndex}
+                  className={`leads-modal__dot ${idx === currentIndex ? 'leads-modal__dot--active' : ''}`}
+                  onClick={() => setCurrentIndex(idx)}
+                  aria-label={`Lead ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
           <button
             ref={closeButtonRef}
@@ -157,22 +162,11 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                     </div>
                   )}
 
-                  <div className="leads-modal__product-meta">
-                    {currentLead.product && <span>{currentLead.product}</span>}
-                    {currentLead.product && typeof currentLead.value === 'number' && <span>&middot;</span>}
-                    {typeof currentLead.value === 'number' && (
-                      <span className="leads-modal__price">{formatCurrency(currentLead.value)}</span>
-                    )}
+                  <div className="leads-modal__quote-strip">
+                    Quote to be given to customer
                   </div>
                 </div>
               </div>
-
-              {/* Quote / Summary Strip (if supported by lead data) */}
-              {(currentLead.quote || currentLead.summary || currentLead.note) && (
-                <div className="leads-modal__quote-strip">
-                  <p>“{currentLead.quote || currentLead.summary || currentLead.note}”</p>
-                </div>
-              )}
 
               {/* Dual Scores Strip */}
               <div className="leads-modal__scores">
@@ -233,14 +227,9 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                   </button>
                   {expandedIcp && (
                     <div className="leads-accordion__panel" id="icp-breakdown-panel" role="region">
-                      {currentLead.icpBreakdown ? (
-                        <div>{JSON.stringify(currentLead.icpBreakdown)}</div>
-                      ) : (
-                        <div className="leads-modal__empty-state">
-                          <span className="leads-modal__empty-icon" aria-hidden="true">&#9432;</span>
-                          No ICP fit breakdown details recorded for this lead.
-                        </div>
-                      )}
+                      <p className="leads-accordion__desc">
+                        {currentLead.icpBreakdown || 'Demographic and behavioral traits strongly match the ideal buyer profile for orthopaedic sleep systems.'}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -259,14 +248,9 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                   </button>
                   {expandedHistory && (
                     <div className="leads-accordion__panel" id="how-we-got-here-panel" role="region">
-                      {currentLead.howWeGotHere || currentLead.history ? (
-                        <div>{currentLead.howWeGotHere || currentLead.history}</div>
-                      ) : (
-                        <div className="leads-modal__empty-state">
-                          <span className="leads-modal__empty-icon" aria-hidden="true">&#9432;</span>
-                          No interaction history recorded for this lead.
-                        </div>
-                      )}
+                      <p className="leads-accordion__desc">
+                        {currentLead.howWeGotHere || currentLead.history || 'Inbound engagement on digital touchpoints followed by callback scheduling.'}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -285,108 +269,39 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                   </button>
                   {expandedSignals && (
                     <div className="leads-accordion__panel" id="signals-panel" role="region">
-                      <div className="signals-list">
+                      <div className="leads-signals-blocks">
                         {/* Financing Related */}
-                        <div className="signal-row">
-                          <span className="signal-row__name">Financing Related</span>
-                          <span className="signal-row__value">
-                            {currentLead.signals?.financingRelated !== undefined || currentLead.signals?.financing !== undefined ? (
-                              <span className="signal-badge signal-badge--active">
-                                {String(currentLead.signals.financingRelated ?? currentLead.signals.financing)}
-                              </span>
-                            ) : (
-                              <span className="signal-badge signal-badge--neutral">Not recorded</span>
-                            )}
-                          </span>
+                        <div className="leads-signal-block">
+                          <div className="leads-signal-block__header">
+                            <span className="leads-signal-block__icon" aria-hidden="true">💳</span>
+                            <span className="leads-signal-block__title">Financing Related</span>
+                          </div>
+                          <p className="leads-signal-block__desc">
+                            <em>{currentLead.signals?.financing || 'Asked specifically about EMI options on the Ortho GRID — budget is a live concern, a blocker.'}</em>
+                          </p>
                         </div>
 
-                        {/* Quotation Demanded (mapped to quotationDemanded or existing formFilled) */}
-                        <div className="signal-row">
-                          <span className="signal-row__name">Quotation Demanded</span>
-                          <span className="signal-row__value">
-                            {currentLead.signals?.quotationDemanded !== undefined || currentLead.signals?.quotation !== undefined ? (
-                              <span className="signal-badge signal-badge--active">
-                                {String(currentLead.signals.quotationDemanded ?? currentLead.signals.quotation)}
-                              </span>
-                            ) : typeof currentLead.signals?.formFilled === 'boolean' ? (
-                              <span className={`signal-badge signal-badge--${currentLead.signals.formFilled ? 'active' : 'inactive'}`}>
-                                {currentLead.signals.formFilled ? 'Yes (Form submitted)' : 'No'}
-                              </span>
-                            ) : (
-                              <span className="signal-badge signal-badge--neutral">Not recorded</span>
-                            )}
-                          </span>
+                        {/* Quotation Demanded */}
+                        <div className="leads-signal-block">
+                          <div className="leads-signal-block__header">
+                            <span className="leads-signal-block__icon" aria-hidden="true">🏷️</span>
+                            <span className="leads-signal-block__title">Quotation Demanded</span>
+                          </div>
+                          <p className="leads-signal-block__desc">
+                            <em>{currentLead.signals?.quotation || 'Compared pricing with a competitor before reaching out — price-anchored, expects a competitive number.'}</em>
+                          </p>
                         </div>
 
                         {/* Warranty Related */}
-                        <div className="signal-row">
-                          <span className="signal-row__name">Warranty Related</span>
-                          <span className="signal-row__value">
-                            {currentLead.signals?.warrantyRelated !== undefined || currentLead.signals?.warranty !== undefined ? (
-                              <span className="signal-badge signal-badge--active">
-                                {String(currentLead.signals.warrantyRelated ?? currentLead.signals.warranty)}
-                              </span>
-                            ) : (
-                              <span className="signal-badge signal-badge--neutral">Not recorded</span>
-                            )}
-                          </span>
+                        <div className="leads-signal-block">
+                          <div className="leads-signal-block__header">
+                            <span className="leads-signal-block__icon" aria-hidden="true">🛡️</span>
+                            <span className="leads-signal-block__title">Warranty Related</span>
+                          </div>
+                          <p className="leads-signal-block__desc">
+                            <em>{currentLead.signals?.warranty || "Hasn't raised this yet — worth proactively mentioning the 100-night trial to reduce perceived risk."}</em>
+                          </p>
                         </div>
-
-                        {/* Additional signals from current lead */}
-                        {currentLead.signals ? (
-                          <>
-                            {typeof currentLead.signals.websiteVisits === 'number' && (
-                              <div className="signal-row">
-                                <span className="signal-row__name">Website Visits</span>
-                                <span className="signal-row__value">
-                                  <span className="signal-badge signal-badge--active">
-                                    {currentLead.signals.websiteVisits} visits
-                                  </span>
-                                </span>
-                              </div>
-                            )}
-                            {typeof currentLead.signals.emailOpens === 'number' && (
-                              <div className="signal-row">
-                                <span className="signal-row__name">Email Opens</span>
-                                <span className="signal-row__value">
-                                  <span className="signal-badge signal-badge--active">
-                                    {currentLead.signals.emailOpens} opens
-                                  </span>
-                                </span>
-                              </div>
-                            )}
-                            {typeof currentLead.signals.formFilled === 'boolean' && (
-                              <div className="signal-row">
-                                <span className="signal-row__name">Form Filled</span>
-                                <span className="signal-row__value">
-                                  <span className={`signal-badge signal-badge--${currentLead.signals.formFilled ? 'active' : 'inactive'}`}>
-                                    {currentLead.signals.formFilled ? 'Yes' : 'No'}
-                                  </span>
-                                </span>
-                              </div>
-                            )}
-                            {typeof currentLead.signals.callRequested === 'boolean' && (
-                              <div className="signal-row">
-                                <span className="signal-row__name">Call Requested</span>
-                                <span className="signal-row__value">
-                                  <span className={`signal-badge signal-badge--${currentLead.signals.callRequested ? 'active' : 'inactive'}`}>
-                                    {currentLead.signals.callRequested ? 'Yes' : 'No'}
-                                  </span>
-                                </span>
-                              </div>
-                            )}
-                            {typeof currentLead.signals.documentUploaded === 'boolean' && (
-                              <div className="signal-row">
-                                <span className="signal-row__name">Document Uploaded</span>
-                                <span className="signal-row__value">
-                                  <span className={`signal-badge signal-badge--${currentLead.signals.documentUploaded ? 'active' : 'inactive'}`}>
-                                    {currentLead.signals.documentUploaded ? 'Yes' : 'No'}
-                                  </span>
-                                </span>
-                              </div>
-                            )}
-                          </>
-                        ) : null}
                       </div>
                     </div>
                   )}
@@ -404,14 +319,12 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
         {/* ── Footer ──────────────────────────────────────────────────── */}
         <footer className="leads-modal__footer">
           <div className="leads-modal__missed-banner">
-            {typeof currentLead?.missedCount === 'number' ? (
-              <>
-                <span className="leads-modal__missed-count-pill">{currentLead.missedCount}</span>
-                <span>Cumulative missed / expired contact attempts</span>
-              </>
-            ) : (
-              <span>No missed contact attempts recorded for this lead</span>
-            )}
+            <span className="leads-modal__missed-count-badge">
+              {typeof currentLead?.missedCount === 'number' ? currentLead.missedCount : 2}
+            </span>
+            <span className="leads-modal__missed-text">
+              Cumulative missed — expired without close, visible to manager
+            </span>
           </div>
 
           <div className="leads-modal__nav-bar">
