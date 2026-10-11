@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './Dashboard.css'
 import LeadsModal from '../leads/LeadsModal'
+import { formatCurrency } from '../../utils/format'
 import {
   AGENT,
   DASHBOARD_KPI,
-  TODAY_PROGRESS,
   PEOPLE_WAITING,
   EARNINGS,
   TASKS,
@@ -25,17 +25,9 @@ import {
 function Dashboard({ onNavigate }) {
   const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false)
 
-  // Simple formatter for currency values based on mock data's currency settings
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: EARNINGS.currency,
-      maximumFractionDigits: 0
-    }).format(val)
-  }
-
   // Find the maximum value for the volume chart to scale bars appropriately
   const maxVolume = Math.max(...CHART_CALL_VOLUME.map(d => d.calls), 1)
+  const totalTasks = TASKS.callbacks + TASKS.hotLeads + TASKS.outcomes
 
   return (
     <div className="dashboard">
@@ -43,7 +35,7 @@ function Dashboard({ onNavigate }) {
       <div className="dashboard__banner">
         <div>
           <h1 className="dashboard__greeting">{AGENT.greeting}, {AGENT.name}</h1>
-          <p className="dashboard__role">{AGENT.role} · {AGENT.team}</p>
+          <p className="dashboard__role">The Sleep Company · Call Centre</p>
         </div>
         <div className="dashboard__banner-actions">
           <div className="dashboard__status-pill">
@@ -53,7 +45,7 @@ function Dashboard({ onNavigate }) {
         </div>
       </div>
 
-      {/* ── KPI Cards ───────────────────────────────────────────────────── */}
+      {/* ── Tight KPI Cards Strip Directly Under Banner ──────────────────── */}
       <div className="dashboard__kpis">
         {DASHBOARD_KPI.map((kpi) => (
           <div key={kpi.id} className="kpi-card">
@@ -70,40 +62,67 @@ function Dashboard({ onNavigate }) {
         ))}
       </div>
 
-      {/* ── Main Layout ─────────────────────────────────────────────────── */}
+      {/* ── Green Card: MY PROGRESS · TODAY ─────────────────────────────── */}
+      <section className="dashboard__progress-card">
+        <h2 className="dashboard__progress-title">MY PROGRESS · TODAY</h2>
+        <div className="dashboard__progress-counts">
+          <div className="dashboard__progress-item">
+            <span className="dashboard__progress-num">3</span>
+            <span className="dashboard__progress-label">Leads created</span>
+          </div>
+          <div className="dashboard__progress-divider" aria-hidden="true" />
+          <div className="dashboard__progress-item">
+            <span className="dashboard__progress-num">2</span>
+            <span className="dashboard__progress-label">Leads called</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Two-Column Main Layout ───────────────────────────────────────── */}
       <div className="dashboard__main">
-        {/* Left Column */}
+        {/* Left Column: Who's waiting */}
         <div className="dashboard__col">
-          
-          {/* Today's Progress */}
           <section className="dash-card">
             <header className="dash-card__header">
-              <h2 className="dash-card__title">{TODAY_PROGRESS.label}</h2>
+              <h2 className="dash-card__title">Who's waiting</h2>
+              <button 
+                type="button"
+                className="dash-action-btn" 
+                onClick={() => onNavigate('plan-calls-to-make')}
+              >
+                Open planner &rarr;
+              </button>
             </header>
-            <div>
-              <div className="progress-meta">
-                <span className="progress-meta__val">
-                  {TODAY_PROGRESS.completed}{' '}
-                  <span className="progress-meta__lbl">completed</span>
-                </span>
-                <span className="progress-meta__target">Target: {TODAY_PROGRESS.target}</span>
-              </div>
-              <div className="progress-track" aria-hidden="true">
-                <div 
-                  className="progress-fill" 
-                  style={{ 
-                    width: `${(TODAY_PROGRESS.completed / TODAY_PROGRESS.target) * 100}%`,
-                    backgroundColor: 'var(--color-purple-500)'
-                  }}
-                />
-              </div>
+            <div className="waitlist">
+              {PEOPLE_WAITING.slice(0, 3).map((person, index) => {
+                const isUrgent = index >= 2 || person.priority === 'high'
+                return (
+                  <div key={person.id} className="waitlist-item">
+                    <div className="waitlist-item__avatar" aria-hidden="true">
+                      {person.initials}
+                    </div>
+                    <div className="waitlist-item__content">
+                      <div className="waitlist-item__header">
+                        <span className="waitlist-item__name">{person.name}</span>
+                        <span className={`waitlist-item__chip ${isUrgent ? 'waitlist-item__chip--red' : 'waitlist-item__chip--amber'}`}>
+                          {person.timeLabel}
+                        </span>
+                      </div>
+                      <p className="waitlist-item__note">{person.note}</p>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </section>
+        </div>
 
+        {/* Right Column: Earnings & My Tasks */}
+        <div className="dashboard__col">
           {/* Earnings */}
           <section className="dash-card">
             <header className="dash-card__header">
-              <h2 className="dash-card__title">Earnings</h2>
+              <h2 className="dash-card__title">My earnings this month</h2>
             </header>
             <div>
               <div className="progress-meta">
@@ -114,79 +133,54 @@ function Dashboard({ onNavigate }) {
                 <div 
                   className="progress-fill" 
                   style={{ 
-                    width: `${(EARNINGS.earned / EARNINGS.target) * 100}%`, 
-                    backgroundColor: 'var(--color-green-600)' 
+                    width: `${Math.min(100, (EARNINGS.earned / EARNINGS.target) * 100)}%`, 
+                    backgroundColor: 'var(--color-green-600, #16a34a)' 
                   }}
                 />
               </div>
-              <p style={{ marginTop: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                + {formatCurrency(EARNINGS.queued)} from queued work
+              <p className="earnings-queued-note">
+                {formatCurrency(EARNINGS.queued)} from queued work
               </p>
             </div>
           </section>
 
-          {/* My Tasks */}
-          <section className="dash-card">
-            <header className="dash-card__header">
-              <h2 className="dash-card__title">My Tasks</h2>
+          {/* My Tasks (Dark brown / amber card) */}
+          <section className="tasks-card">
+            <header className="tasks-card__header">
+              <div className="tasks-card__title-row">
+                <h2 className="tasks-card__title">My Tasks</h2>
+                <span className="tasks-card__badge">{totalTasks}</span>
+              </div>
             </header>
-            <div className="tasks-grid">
-              <div className="task-box">
-                <span className="task-box__val">{TASKS.callbacks}</span>
-                <span className="task-box__lbl">Callbacks</span>
+            <div className="tasks-card__list">
+              <div className="tasks-card__row">
+                <div className="tasks-card__row-left">
+                  <span className="tasks-card__icon" aria-hidden="true">📞</span>
+                  <span className="tasks-card__row-title">2 callbacks</span>
+                </div>
+                <span className="tasks-card__row-muted">Due this afternoon</span>
               </div>
               <button 
                 type="button"
-                className="task-box task-box--actionable" 
+                className="tasks-card__row tasks-card__row--actionable" 
                 onClick={() => setIsLeadsModalOpen(true)}
                 title="View Hot Leads"
                 aria-haspopup="dialog"
                 aria-expanded={isLeadsModalOpen}
               >
-                <span className="task-box__val" style={{ color: 'var(--color-purple-600)' }}>
-                  {TASKS.hotLeads}
-                </span>
-                <span className="task-box__lbl">Hot Leads</span>
-              </button>
-              <div className="task-box">
-                <span className="task-box__val">{TASKS.outcomes}</span>
-                <span className="task-box__lbl">Outcomes</span>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        {/* Right Column */}
-        <div className="dashboard__col">
-          {/* Who's Waiting */}
-          <section className="dash-card">
-            <header className="dash-card__header">
-              <h2 className="dash-card__title">Who's waiting</h2>
-              <button 
-                className="dash-action-btn" 
-                onClick={() => onNavigate('plan-calls-to-make')}
-              >
-                Open planner &rarr;
-              </button>
-            </header>
-            <div className="waitlist">
-              {PEOPLE_WAITING.map((person) => (
-                <div key={person.id} className="waitlist-item">
-                  <div className="waitlist-item__avatar" aria-hidden="true">
-                    {person.initials}
-                  </div>
-                  <div className="waitlist-item__content">
-                    <div className="waitlist-item__header">
-                      <span className="waitlist-item__name">{person.name}</span>
-                      <span className="waitlist-item__time">{person.timeLabel}</span>
-                    </div>
-                    <p className="waitlist-item__note">{person.note}</p>
-                    <div className="waitlist-item__meta">
-                      {person.product} &middot; {formatCurrency(person.expectedValue)}
-                    </div>
-                  </div>
+                <div className="tasks-card__row-left">
+                  <span className="tasks-card__icon" aria-hidden="true">🔥</span>
+                  <span className="tasks-card__row-title tasks-card__row-title--hot">2 hot leads</span>
                 </div>
-              ))}
+                <span className="tasks-card__row-muted">Click to inspect</span>
+              </button>
+              <div className="tasks-card__row">
+                <div className="tasks-card__row-left">
+                  <span className="tasks-card__icon" aria-hidden="true">✓</span>
+                  <span className="tasks-card__row-title">1 outcome</span>
+                </div>
+                <span className="tasks-card__row-muted">Logged today</span>
+              </div>
             </div>
           </section>
         </div>
@@ -197,52 +191,57 @@ function Dashboard({ onNavigate }) {
         {/* Calls Handled Chart */}
         <section className="dash-card">
           <header className="dash-card__header">
-            <h2 className="dash-card__title">Calls handled — last 7 days</h2>
+            <h2 className="dash-card__title">Calls handled · last 7 days</h2>
           </header>
           <div className="chart-container" aria-label="Bar chart showing calls handled over the last 7 days">
-            {CHART_CALL_VOLUME.map((data, index) => (
-              <div key={index} className="chart-bar-group">
-                <div className="chart-bar-wrapper">
-                  <div 
-                    className="chart-bar chart-bar--green" 
-                    style={{ height: `${(data.calls / maxVolume) * 100}%` }}
-                    title={`${data.calls} calls`}
-                  >
-                    <div className="chart-tooltip">{data.calls}</div>
+            {CHART_CALL_VOLUME.map((data, index) => {
+              const isLast = index === CHART_CALL_VOLUME.length - 1
+              return (
+                <div key={index} className="chart-bar-group">
+                  <div className="chart-bar-wrapper">
+                    <span className="chart-bar-value">{data.calls}</span>
+                    <div 
+                      className={`chart-bar ${isLast ? 'chart-bar--green-dark' : 'chart-bar--green'}`}
+                      style={{ height: `${(data.calls / maxVolume) * 100}%` }}
+                      title={`${data.calls} calls`}
+                    />
                   </div>
+                  <span className="chart-label">{data.day}</span>
                 </div>
-                <span className="chart-label">{data.day}</span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 
         {/* Call Quality Chart */}
         <section className="dash-card">
           <header className="dash-card__header">
-            <h2 className="dash-card__title">Call quality — last 7 days</h2>
+            <h2 className="dash-card__title">Call quality · last 7 days</h2>
           </header>
           <div className="chart-container" aria-label="Bar chart showing call quality score over the last 7 days">
-            {CHART_CALL_QUALITY.map((data, index) => (
-              <div key={index} className="chart-bar-group">
-                <div className="chart-bar-wrapper">
-                  <div 
-                    className="chart-bar chart-bar--blue" 
-                    style={{ height: `${data.score}%` }}
-                    title={`${data.score}%`}
-                  >
-                    <div className="chart-tooltip">{data.score}%</div>
+            {CHART_CALL_QUALITY.map((data, index) => {
+              const isLast = index === CHART_CALL_QUALITY.length - 1
+              return (
+                <div key={index} className="chart-bar-group">
+                  <div className="chart-bar-wrapper">
+                    <span className="chart-bar-value">{data.score}%</span>
+                    <div 
+                      className={`chart-bar ${isLast ? 'chart-bar--blue-dark' : 'chart-bar--blue'}`}
+                      style={{ height: `${data.score}%` }}
+                      title={`${data.score}%`}
+                    />
                   </div>
+                  <span className="chart-label">{data.day}</span>
                 </div>
-                <span className="chart-label">{data.day}</span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
       </div>
 
       {/* ── Leads Inspection Modal ──────────────────────────────────────── */}
       <LeadsModal 
+        key={isLeadsModalOpen ? 'open' : 'closed'}
         isOpen={isLeadsModalOpen} 
         onClose={() => setIsLeadsModalOpen(false)} 
         leads={LEADS.slice(0, 5)} 
