@@ -1,31 +1,35 @@
 import { useState } from 'react'
+import {
+  LayoutDashboard,
+  PhoneCall,
+  PhoneOutgoing,
+  PhoneIncoming,
+  Clock,
+  Headphones,
+  Calendar,
+  Activity,
+  ChevronRight,
+} from 'lucide-react'
 import './Sidebar.css'
 
 /**
  * NAV_ITEMS defines the full navigation tree.
- *
- * Each item has:
- *   id       — unique key used for active-state tracking
- *   label    — text shown in the sidebar
- *   children — optional array of sub-items (currently only "Plan" has these)
- *
- * This data lives here rather than in App so the sidebar is self-contained.
- * Move it to a separate data file if it grows large.
  */
 const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   {
     id: 'plan',
     label: 'Plan',
+    icon: PhoneCall,
     children: [
-      { id: 'plan-calls-to-make', label: 'Calls to make' },
-      { id: 'plan-incoming',      label: 'Incoming' },
-      { id: 'plan-recent',        label: 'Recent' },
-      { id: 'plan-practise',      label: 'Practise a call' },
+      { id: 'plan-calls-to-make', label: 'Calls to make', icon: PhoneOutgoing },
+      { id: 'plan-incoming',      label: 'Incoming',      icon: PhoneIncoming },
+      { id: 'plan-recent',        label: 'Recent',        icon: Clock },
+      { id: 'plan-practise',      label: 'Practise a call', icon: Headphones },
     ],
   },
-  { id: 'calendar', label: 'Calendar' },
-  { id: 'pulse',    label: 'Pulse' },
+  { id: 'calendar', label: 'Calendar', icon: Calendar },
+  { id: 'pulse',    label: 'Pulse',    icon: Activity },
 ]
 
 /**
@@ -79,6 +83,7 @@ function Sidebar({ activeId, onSelect, isMobileNavOpen = false, onCloseMobileNav
           const isParentActive =
             activeId === item.id ||
             (hasChildren && item.children.some((c) => c.id === activeId))
+          const ItemIcon = item.icon
 
           if (hasChildren) {
             // ── Accordion parent (Plan) ────────────────────────
@@ -95,39 +100,47 @@ function Sidebar({ activeId, onSelect, isMobileNavOpen = false, onCloseMobileNav
                   onClick={handlePlanToggle}
                   aria-expanded={planOpen}
                 >
-                  {item.label}
-                  <span
+                  <span className="nav-item__left">
+                    {ItemIcon && <ItemIcon className="nav-item__icon" size={16} aria-hidden="true" />}
+                    <span>{item.label}</span>
+                  </span>
+                  <ChevronRight
                     className={[
                       'nav-item__arrow',
                       planOpen ? 'nav-item__arrow--open' : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
+                    size={14}
                     aria-hidden="true"
-                  >
-                    ›
-                  </span>
+                  />
                 </button>
 
                 {planOpen && (
                   <div className="nav-sublist" role="list">
-                    {item.children.map((child) => (
-                      <button
-                        key={child.id}
-                        type="button"
-                        role="listitem"
-                        className={[
-                          'nav-subitem',
-                          activeId === child.id ? 'nav-subitem--active' : '',
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
-                        onClick={() => handleItemClick(child.id)}
-                        aria-current={activeId === child.id ? 'page' : undefined}
-                      >
-                        {child.label}
-                      </button>
-                    ))}
+                    {item.children.map((child) => {
+                      const ChildIcon = child.icon
+                      return (
+                        <button
+                          key={child.id}
+                          type="button"
+                          role="listitem"
+                          className={[
+                            'nav-subitem',
+                            activeId === child.id ? 'nav-subitem--active' : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
+                          onClick={() => handleItemClick(child.id)}
+                          aria-current={activeId === child.id ? 'page' : undefined}
+                        >
+                          <span className="nav-subitem__left">
+                            {ChildIcon && <ChildIcon className="nav-subitem__icon" size={14} aria-hidden="true" />}
+                            <span>{child.label}</span>
+                          </span>
+                        </button>
+                      )
+                    })}
                   </div>
                 )}
               </div>
@@ -148,7 +161,10 @@ function Sidebar({ activeId, onSelect, isMobileNavOpen = false, onCloseMobileNav
               onClick={() => handleItemClick(item.id)}
               aria-current={activeId === item.id ? 'page' : undefined}
             >
-              {item.label}
+              <span className="nav-item__left">
+                {ItemIcon && <ItemIcon className="nav-item__icon" size={16} aria-hidden="true" />}
+                <span>{item.label}</span>
+              </span>
             </button>
           )
         })}

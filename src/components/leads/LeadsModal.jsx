@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { CreditCard, Tag, ShieldCheck } from 'lucide-react'
 import './LeadsModal.css'
 import { LEADS } from '../../data/mockData'
 import { formatCurrency } from '../../utils/format'
@@ -273,7 +274,7 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                         {/* Financing Related */}
                         <div className="leads-signal-block">
                           <div className="leads-signal-block__header">
-                            <span className="leads-signal-block__icon" aria-hidden="true">💳</span>
+                            <span className="leads-signal-block__icon" aria-hidden="true"><CreditCard size={15} /></span>
                             <span className="leads-signal-block__title">Financing Related</span>
                           </div>
                           <p className="leads-signal-block__desc">
@@ -284,7 +285,7 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                         {/* Quotation Demanded */}
                         <div className="leads-signal-block">
                           <div className="leads-signal-block__header">
-                            <span className="leads-signal-block__icon" aria-hidden="true">🏷️</span>
+                            <span className="leads-signal-block__icon" aria-hidden="true"><Tag size={15} /></span>
                             <span className="leads-signal-block__title">Quotation Demanded</span>
                           </div>
                           <p className="leads-signal-block__desc">
@@ -295,7 +296,7 @@ function LeadsModal({ isOpen, onClose, leads = LEADS.slice(0, 5) }) {
                         {/* Warranty Related */}
                         <div className="leads-signal-block">
                           <div className="leads-signal-block__header">
-                            <span className="leads-signal-block__icon" aria-hidden="true">🛡️</span>
+                            <span className="leads-signal-block__icon" aria-hidden="true"><ShieldCheck size={15} /></span>
                             <span className="leads-signal-block__title">Warranty Related</span>
                           </div>
                           <p className="leads-signal-block__desc">

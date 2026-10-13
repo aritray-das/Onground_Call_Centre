@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Phone, PhoneCall, PhoneOff, Mic, MicOff, Hash, Bot } from 'lucide-react'
 import './CallPanel.css'
 import { useTwilioCall } from '../../hooks/useTwilioCall'
 
@@ -103,7 +104,7 @@ function CallPanel() {
           {/* Header */}
           <div className="call-panel__header">
             <div className="call-panel__title-row">
-              <span className="call-panel__badge" aria-hidden="true">📞</span>
+              <span className="call-panel__badge" aria-hidden="true"><Phone size={14} /></span>
               <span className="call-panel__title">Phone call</span>
               {isInCall && (
                 <span className="call-panel__live-indicator">LIVE</span>
@@ -152,7 +153,7 @@ function CallPanel() {
                     onClick={() => sendDigits('1')}
                     title="Sends DTMF tone 1 to bypass Twilio trial prompt"
                   >
-                    🔢 Press 1
+                    <Hash size={13} style={{ marginRight: 4 }} /> Press 1
                   </button>
                 )}
                 {isInCall && (
@@ -162,7 +163,11 @@ function CallPanel() {
                     onClick={toggleMute}
                     aria-label={isMuted ? 'Unmute microphone' : 'Mute microphone'}
                   >
-                    {isMuted ? '🔇 Unmute' : '🎙️ Mute'}
+                    {isMuted ? (
+                      <><MicOff size={13} style={{ marginRight: 4 }} /> Unmute</>
+                    ) : (
+                      <><Mic size={13} style={{ marginRight: 4 }} /> Mute</>
+                    )}
                   </button>
                 )}
                 <button 
@@ -170,7 +175,7 @@ function CallPanel() {
                   className="call-btn call-btn--hangup"
                   onClick={hangUp}
                 >
-                  Hang up
+                  <PhoneOff size={13} style={{ marginRight: 4 }} /> Hang up
                 </button>
               </div>
             </div>
@@ -214,7 +219,7 @@ function CallPanel() {
                     className="call-panel__preset-btn"
                     onClick={() => setPhoneNumber('AI-Customer')}
                   >
-                    🤖 Call AI Customer (Demo)
+                    <Bot size={13} style={{ marginRight: 4 }} /> Call AI Customer (Demo)
                   </button>
                 </div>
               </div>
@@ -248,7 +253,7 @@ function CallPanel() {
         title="Phone call"
       >
         <span className="call-widget__fab-icon" aria-hidden="true">
-          📞
+          <PhoneCall size={22} />
         </span>
         {isInCall && (
           <span className="call-widget__fab-badge" aria-hidden="true" />

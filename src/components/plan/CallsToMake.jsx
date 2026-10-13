@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { ChevronDown, ChevronLeft, ChevronRight, PhoneCall } from 'lucide-react'
 import './CallsToMake.css'
 import { CALLS_TO_MAKE } from '../../data/mockData'
 import { formatCurrency } from '../../utils/format'
@@ -109,12 +110,11 @@ function CallsToMake() {
                     <div className="planner-card__score-badge" title={`Intent Score: ${call.score}`}>
                       {call.score}
                     </div>
-                    <span 
+                    <ChevronDown 
                       className={`planner-card__chevron ${isExpanded ? 'planner-card__chevron--expanded' : ''}`}
+                      size={14}
                       aria-hidden="true"
-                    >
-                      &#9662;
-                    </span>
+                    />
                   </div>
                 </button>
 
@@ -144,7 +144,7 @@ function CallsToMake() {
                             className="planner-btn planner-btn--primary"
                             onClick={() => handleStartCall(call.phone)}
                           >
-                            Start Call
+                            <PhoneCall size={14} style={{ marginRight: 6 }} /> Start Call
                           </button>
                           <button 
                             type="button"
@@ -172,7 +172,7 @@ function CallsToMake() {
               onClick={() => handlePageChange(currentPage - 1)}
               aria-label="Previous page"
             >
-              &larr; Prev
+              <ChevronLeft size={14} style={{ marginRight: 4 }} /> Prev
             </button>
             <span className="pagination__info">Page {currentPage} of {totalPages}</span>
             <button 
@@ -181,7 +181,7 @@ function CallsToMake() {
               onClick={() => handlePageChange(currentPage + 1)}
               aria-label="Next page"
             >
-              Next &rarr;
+              Next <ChevronRight size={14} style={{ marginLeft: 4 }} />
             </button>
           </div>
         )}

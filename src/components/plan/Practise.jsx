@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Lightbulb } from 'lucide-react'
 import './Practise.css'
 
 const SCENARIOS = [
@@ -152,7 +153,7 @@ function Practise() {
           </p>
         </div>
         <div className="practise-banner">
-          <span aria-hidden="true">💡</span>
+          <Lightbulb size={14} aria-hidden="true" />
           <span>Local Demo &middot; Interactive simulation mode (no external calling service)</span>
         </div>
       </div>

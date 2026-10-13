@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { ArrowLeft, Smile } from 'lucide-react'
 import './PulseChannel.css'
 
 const INITIAL_MESSAGES = [
@@ -119,7 +120,7 @@ function PulseChannel({ onNavigate }) {
           onClick={() => onNavigate?.('pulse')}
           aria-label="Back to Pulse Home"
         >
-          &larr;
+          <ArrowLeft size={16} aria-hidden="true" />
         </button>
         <div className="channel-header__info">
           <h1 className="channel-header__title"># callcentre-team</h1>
@@ -236,7 +237,7 @@ function PulseChannel({ onNavigate }) {
               onClick={() => setInputText((prev) => prev + ' 👍')}
               aria-label="Insert emoji"
             >
-              😊
+              <Smile size={18} aria-hidden="true" />
             </button>
             <input 
               type="text" 

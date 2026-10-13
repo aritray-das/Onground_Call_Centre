@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Phone, Flame, Check } from 'lucide-react'
 import './Dashboard.css'
 import LeadsModal from '../leads/LeadsModal'
 import { formatCurrency } from '../../utils/format'
@@ -155,7 +156,7 @@ function Dashboard({ onNavigate }) {
             <div className="tasks-card__list">
               <div className="tasks-card__row">
                 <div className="tasks-card__row-left">
-                  <span className="tasks-card__icon" aria-hidden="true">📞</span>
+                  <span className="tasks-card__icon" aria-hidden="true"><Phone size={13} /></span>
                   <span className="tasks-card__row-title">2 callbacks</span>
                 </div>
                 <span className="tasks-card__row-muted">Due this afternoon</span>
@@ -169,14 +170,14 @@ function Dashboard({ onNavigate }) {
                 aria-expanded={isLeadsModalOpen}
               >
                 <div className="tasks-card__row-left">
-                  <span className="tasks-card__icon" aria-hidden="true">🔥</span>
+                  <span className="tasks-card__icon" aria-hidden="true"><Flame size={14} color="#f97316" /></span>
                   <span className="tasks-card__row-title tasks-card__row-title--hot">2 hot leads</span>
                 </div>
                 <span className="tasks-card__row-muted">Click to inspect</span>
               </button>
               <div className="tasks-card__row">
                 <div className="tasks-card__row-left">
-                  <span className="tasks-card__icon" aria-hidden="true">✓</span>
+                  <span className="tasks-card__icon" aria-hidden="true"><Check size={14} color="#16a34a" /></span>
                   <span className="tasks-card__row-title">1 outcome</span>
                 </div>
                 <span className="tasks-card__row-muted">Logged today</span>

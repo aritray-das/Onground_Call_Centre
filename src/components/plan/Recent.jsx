@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { PhoneCall } from 'lucide-react'
 import './Recent.css'
 import { RECENT_CALLS } from '../../data/mockData'
 
@@ -101,7 +102,7 @@ function Recent() {
                         onClick={() => handleCall(call.phone)}
                         aria-label={`Call ${call.callerName}`}
                       >
-                        Call
+                        <PhoneCall size={14} style={{ marginRight: 6 }} /> Call
                       </button>
                       <button 
                         type="button"

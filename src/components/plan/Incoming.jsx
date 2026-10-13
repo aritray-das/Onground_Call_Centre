@@ -1,3 +1,4 @@
+import { PhoneCall } from 'lucide-react'
 import './Incoming.css'
 import { INCOMING_SUMMARY, INCOMING_CALLS } from '../../data/mockData'
 import { formatCurrency } from '../../utils/format'
@@ -69,7 +70,7 @@ function Incoming() {
                   onClick={() => handleCallback(call.phone)}
                   aria-label={`Call back ${call.callerName}`}
                 >
-                  Call back
+                  <PhoneCall size={14} style={{ marginRight: 6 }} /> Call back
                 </button>
               </div>
             </div>

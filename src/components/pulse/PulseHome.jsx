@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Bot, Trophy } from 'lucide-react'
 import './PulseHome.css'
 import { PULSE_KUDOS } from '../../data/mockData'
 
@@ -78,7 +79,7 @@ function PulseHome({ onNavigate }) {
       <div className="pulse-avani">
         <div className="pulse-avani__header">
           <div className="pulse-avani__title-row">
-            <span className="pulse-avani__icon" aria-hidden="true">🤖</span>
+            <span className="pulse-avani__icon" aria-hidden="true"><Bot size={18} /></span>
             <h2 className="pulse-avani__title">AvaniBot</h2>
           </div>
           <span className="pulse-avani__status">AGENTS ON</span>
@@ -183,7 +184,7 @@ function PulseHome({ onNavigate }) {
       <section className="pulse-kudos-card">
         <div className="pulse-kudos-card__header">
           <div className="pulse-kudos-card__title-row">
-            <span aria-hidden="true">🏆</span>
+            <Trophy size={16} color="#d97706" aria-hidden="true" />
             <h3 className="pulse-kudos-card__title">Kudos</h3>
           </div>
           <span className="pulse-badge--new">NEW</span>

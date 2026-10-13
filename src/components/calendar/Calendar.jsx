@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import './Calendar.css'
 import { CALENDAR_META, CALENDAR_EVENTS } from '../../data/mockData'
 
@@ -141,7 +142,7 @@ function Calendar() {
                 onClick={handlePrevMonth} 
                 aria-label="Previous month"
               >
-                &larr; Prev
+                <ChevronLeft size={14} style={{ marginRight: 4 }} /> Prev
               </button>
               <button 
                 type="button"
@@ -156,7 +157,7 @@ function Calendar() {
                 onClick={handleNextMonth} 
                 aria-label="Next month"
               >
-                Next &rarr;
+                Next <ChevronRight size={14} style={{ marginLeft: 4 }} />
               </button>
             </div>
           </div>

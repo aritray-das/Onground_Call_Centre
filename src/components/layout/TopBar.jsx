@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Menu, Bell, Zap, User, Settings, LogOut } from 'lucide-react'
 import './TopBar.css'
 import { AGENT } from '../../data/mockData'
 
@@ -89,7 +90,7 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
           aria-label="Toggle navigation menu"
           aria-expanded={isMobileNavOpen}
         >
-          &#9776;
+          <Menu size={18} aria-hidden="true" />
         </button>
         <span className="topbar__brand">On-Ground.ai</span>
       </div>
@@ -102,7 +103,7 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
           className="topbar__notification"
           title={`${notificationCount} notifications`}
         >
-          <span className="topbar__bell" aria-hidden="true">🔔</span>
+          <Bell className="topbar__bell" size={18} aria-hidden="true" />
           {notificationCount > 0 && (
             <span className="topbar__badge" aria-label={`${notificationCount} notifications`}>
               {notificationCount}
@@ -115,7 +116,7 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
           className="topbar__points"
           title={`${points} points · ${streak}-day streak`}
         >
-          <span className="topbar__points-icon" aria-hidden="true">⚡</span>
+          <Zap className="topbar__points-icon" size={14} aria-hidden="true" />
           <span className="topbar__points-value">{points.toLocaleString()}</span>
           <span className="topbar__points-label">pts</span>
           <span className="topbar__points-label" style={{ marginLeft: 2 }}>
@@ -163,7 +164,7 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
                   className="topbar__dropdown-item"
                   onClick={() => handleItemClick('Avatar', 'Demo: Avatar settings')}
                 >
-                  <span className="topbar__dropdown-item-icon" aria-hidden="true">👤</span>
+                  <User className="topbar__dropdown-item-icon" size={15} aria-hidden="true" />
                   <span>Avatar</span>
                 </button>
                 <button
@@ -172,7 +173,7 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
                   className="topbar__dropdown-item"
                   onClick={() => handleItemClick('Settings', 'Demo: Settings')}
                 >
-                  <span className="topbar__dropdown-item-icon" aria-hidden="true">⚙️</span>
+                  <Settings className="topbar__dropdown-item-icon" size={15} aria-hidden="true" />
                   <span>Settings</span>
                 </button>
                 <button
@@ -181,7 +182,7 @@ function TopBar({ isMobileNavOpen = false, onToggleMobileNav }) {
                   className="topbar__dropdown-item topbar__dropdown-item--logout"
                   onClick={() => handleItemClick('Logout', 'Demo: Logged out')}
                 >
-                  <span className="topbar__dropdown-item-icon" aria-hidden="true">🚪</span>
+                  <LogOut className="topbar__dropdown-item-icon" size={15} aria-hidden="true" />
                   <span>Logout</span>
                 </button>
               </div>
