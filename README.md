@@ -6,7 +6,7 @@ A high-fidelity rebuild of the On-Ground.ai Call Centre app for The Sleep Compan
 
 - **Live demo**: https://onground-call-centre-brown.vercel.app/
 - **Repository**: https://github.com/aritray-das/Onground_Call_Centre
-- **Screen recording**: https://drive.google.com/file/d/1sd58szYpX2pf2yk3pRyEJIJkybOJ3S70/view?usp=sharing
+- **Screen recording**: https://drive.google.com/file/d/161w3tf3_rLctbUBXow0AjNKnfRdg1Anx/view?usp=sharing
 - **Demo Passcode for Live Calling**: `onground2026` (pre-filled by default in the dialer)
 
 ## How to Run
