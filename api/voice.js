@@ -57,7 +57,7 @@ export default function handler(req, res) {
     // Reconstruct the full public URL Twilio signed
     const proto = req.headers['x-forwarded-proto'] || 'https'
     const host = req.headers['x-forwarded-host'] || req.headers['host'] || ''
-    const url = `${proto}://${host}/api/voice`
+    const url = `${proto}://${host}${req.url}`
 
     const body = parseBody(req)
 
@@ -73,32 +73,70 @@ export default function handler(req, res) {
     }
   }
 
-  // ── Parse request body ────────────────────────────────────────────────
+  // ── Parse request body & query params ─────────────────────────────────
   const body = parseBody(req)
+  let urlObj
+  try {
+    urlObj = new URL(req.url, 'http://localhost')
+  } catch {
+    urlObj = { searchParams: new Map() }
+  }
 
   // The `To` parameter Twilio sends is the `params.To` set by the Voice SDK
-  let rawTo = (body['To'] || '').toString()
+  let rawTo = (body['To'] || urlObj.searchParams.get('To') || '').toString()
 
   // Normalize: strip spaces and dashes so comparisons are consistent
   const normalizedTo = rawTo.replace(/[\s-]/g, '')
 
-  // ── AI Persona Calling (AI-to-Human) ──────────────────────────────────
+  // ── AI Persona Calling (AI-to-Human with Speech Recognition) ──────────
   if (normalizedTo.toLowerCase().includes('ai')) {
+    const stage = (body['stage'] || urlObj.searchParams.get('stage') || '1').toString()
     const twiml = new VoiceResponse()
-    twiml.say(
-      { voice: 'Polly.Aditi', language: 'en-IN' },
-      'Hello Arvind! This is Rajesh from Apex Solutions. I was exploring the On-Ground dot A I Call Centre platform for our sales operations. We have over forty field agents making calls daily, and we are looking for a system to track call volume, lead scoring, and agent earnings. How does On-Ground dot A I help our team improve conversion rates?'
-    )
-    twiml.pause({ length: 4 })
-    twiml.say(
-      { voice: 'Polly.Aditi', language: 'en-IN' },
-      'That makes total sense! The real-time planner and automated lead scoring sound very effective for our team. Can the platform also handle hot lead prioritization and agent performance analytics?'
-    )
-    twiml.pause({ length: 4 })
+
+    if (stage === '1') {
+      const gather = twiml.gather({
+        input: 'speech',
+        action: '/api/voice?stage=2&To=AI-Customer',
+        method: 'POST',
+        speechTimeout: 'auto',
+        timeout: 10,
+        language: 'en-IN',
+      })
+      gather.say(
+        { voice: 'Polly.Aditi', language: 'en-IN' },
+        'Hello Arvind! This is Rajesh from Apex Solutions. I was exploring the On-Ground dot A I Call Centre platform for our sales operations. We have over forty field agents making calls daily, and we are looking for a system to track call volume, lead scoring, and agent earnings. How does On-Ground dot A I help our team improve conversion rates?'
+      )
+      // If user stays silent for 10s, proceed to stage 2
+      twiml.redirect('/api/voice?stage=2&To=AI-Customer')
+      res.setHeader('Content-Type', 'text/xml')
+      return res.status(200).send(twiml.toString())
+    }
+
+    if (stage === '2') {
+      const gather = twiml.gather({
+        input: 'speech',
+        action: '/api/voice?stage=3&To=AI-Customer',
+        method: 'POST',
+        speechTimeout: 'auto',
+        timeout: 10,
+        language: 'en-IN',
+      })
+      gather.say(
+        { voice: 'Polly.Aditi', language: 'en-IN' },
+        'That makes total sense! The real-time planner and automated lead scoring sound very effective for our team. Can the platform also handle hot lead prioritization and agent performance analytics?'
+      )
+      // If user stays silent for 10s, proceed to stage 3
+      twiml.redirect('/api/voice?stage=3&To=AI-Customer')
+      res.setHeader('Content-Type', 'text/xml')
+      return res.status(200).send(twiml.toString())
+    }
+
+    // Stage 3: Closing
     twiml.say(
       { voice: 'Polly.Aditi', language: 'en-IN' },
       'Excellent! That fits our workflow perfectly. Please go ahead and share the platform onboarding link with our operations team. Thank you so much!'
     )
+    twiml.hangup()
     res.setHeader('Content-Type', 'text/xml')
     return res.status(200).send(twiml.toString())
   }
