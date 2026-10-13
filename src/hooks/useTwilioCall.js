@@ -48,9 +48,9 @@ function mapTwilioError(err) {
 export function useTwilioCall() {
   const [passcode, setPasscode] = useState(() => {
     try {
-      return sessionStorage.getItem('demo_passcode') || ''
+      return sessionStorage.getItem('demo_passcode') || 'onground2026'
     } catch {
-      return ''
+      return 'onground2026'
     }
   })
   const [status, setStatus] = useState('idle') // 'idle' | 'connecting' | 'ringing' | 'in-call' | 'error'
