@@ -87,17 +87,17 @@ export default function handler(req, res) {
     const twiml = new VoiceResponse()
     twiml.say(
       { voice: 'Polly.Aditi', language: 'en-IN' },
-      'Hello Arvind! This is Rajesh from Bangalore. I was checking out your Ortho GRID mattress online. It costs 9,490 rupees, but another brand is selling a memory foam mattress for 6,500. Why should I pay more for yours?'
+      'Hello Arvind! This is Rajesh from Apex Solutions. I was exploring the On-Ground dot A I Call Centre platform for our sales operations. We have over forty field agents making calls daily, and we are looking for a system to track call volume, lead scoring, and agent earnings. How does On-Ground dot A I help our team improve conversion rates?'
     )
     twiml.pause({ length: 4 })
     twiml.say(
       { voice: 'Polly.Aditi', language: 'en-IN' },
-      'That makes a lot of sense regarding cooling and spine alignment. What if I wake up with stiffness during the first week? What is your trial policy?'
+      'That makes total sense! The real-time planner and automated lead scoring sound very effective for our team. Can the platform also handle hot lead prioritization and agent performance analytics?'
     )
     twiml.pause({ length: 4 })
     twiml.say(
       { voice: 'Polly.Aditi', language: 'en-IN' },
-      'A 100-night trial with 100% money back sounds wonderful! Please go ahead and send me the payment link with no-cost EMI. Thank you!'
+      'Excellent! That fits our workflow perfectly. Please go ahead and share the platform onboarding link with our operations team. Thank you so much!'
     )
     res.setHeader('Content-Type', 'text/xml')
     return res.status(200).send(twiml.toString())
