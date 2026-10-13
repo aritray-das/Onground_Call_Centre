@@ -19,6 +19,7 @@ function CallPanel() {
     startCall,
     hangUp,
     toggleMute,
+    sendDigits,
     isMuted,
     callSeconds,
     passcode,
@@ -144,6 +145,16 @@ function CallPanel() {
               )}
 
               <div className="call-panel__active-actions">
+                {isInCall && (
+                  <button 
+                    type="button" 
+                    className="call-btn call-btn--key"
+                    onClick={() => sendDigits('1')}
+                    title="Sends DTMF tone 1 to bypass Twilio trial prompt"
+                  >
+                    🔢 Press 1
+                  </button>
+                )}
                 {isInCall && (
                   <button 
                     type="button" 

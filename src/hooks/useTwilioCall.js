@@ -61,6 +61,7 @@ export function useTwilioCall() {
   const deviceRef = useRef(null)
   const callRef = useRef(null)
   const timerRef = useRef(null)
+  const trialTimerRef = useRef([])
   const passcodeRef = useRef(passcode)
   const isMountedRef = useRef(true)
 
@@ -151,6 +152,10 @@ export function useTwilioCall() {
     if (timerRef.current) {
       clearInterval(timerRef.current)
       timerRef.current = null
+    }
+    if (trialTimerRef.current?.length) {
+      trialTimerRef.current.forEach((t) => clearTimeout(t))
+      trialTimerRef.current = []
     }
     callRef.current = null
     setIsMuted(false)
@@ -270,6 +275,30 @@ export function useTwilioCall() {
         setCallSeconds(0)
         setStatus('in-call')
         setIsMuted(call.isMuted())
+
+        // Twilio Trial Accounts prompt: "Press any key to execute your code".
+        // Auto-send digit '1' at 1.5s and 3s to automatically bypass this prompt.
+        const t1 = setTimeout(() => {
+          if (callRef.current && isMountedRef.current) {
+            try {
+              callRef.current.sendDigits('1')
+            } catch {
+              // ignore
+            }
+          }
+        }, 1500)
+
+        const t2 = setTimeout(() => {
+          if (callRef.current && isMountedRef.current) {
+            try {
+              callRef.current.sendDigits('1')
+            } catch {
+              // ignore
+            }
+          }
+        }, 3000)
+
+        trialTimerRef.current = [t1, t2]
       })
 
       call.on('disconnect', () => {
@@ -320,12 +349,22 @@ export function useTwilioCall() {
     }
   }, [isMuted])
 
+  const sendDigits = useCallback((digits) => {
+    if (!callRef.current) return
+    try {
+      callRef.current.sendDigits(digits)
+    } catch {
+      // ignore
+    }
+  }, [])
+
   return {
     status,
     errorMessage,
     startCall,
     hangUp,
     toggleMute,
+    sendDigits,
     isMuted,
     callSeconds,
     passcode,

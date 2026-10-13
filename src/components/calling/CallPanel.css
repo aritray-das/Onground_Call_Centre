@@ -338,6 +338,18 @@
   margin-top: var(--space-2);
 }
 
+.call-btn--key {
+  flex: 1;
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  font-size: 11px;
+}
+
+.call-btn--key:hover {
+  background-color: #fde68a;
+}
+
 .call-btn--mute {
   flex: 1;
   background-color: var(--color-white);
