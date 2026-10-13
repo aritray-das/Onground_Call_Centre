@@ -18,6 +18,10 @@ function CallsToMake() {
   const [demoAction, setDemoAction] = useState({})
   const timeoutsRef = useRef({})
 
+  const handleStartCall = (phone) => {
+    window.dispatchEvent(new CustomEvent('open-call-panel', { detail: { phone } }))
+  }
+
   const handleAction = (callId, actionLabel) => {
     if (timeoutsRef.current[callId]) {
       clearTimeout(timeoutsRef.current[callId])
@@ -55,7 +59,6 @@ function CallsToMake() {
   const toggleExpand = (id) => {
     setExpandedId((prev) => (prev === id ? null : id))
   }
-
 
   return (
     <div className="planner">
@@ -139,14 +142,14 @@ function CallsToMake() {
                           <button 
                             type="button"
                             className="planner-btn planner-btn--primary"
-                            onClick={() => handleAction(call.id, 'Demo: Simulated call (no real call placed)')}
+                            onClick={() => handleStartCall(call.phone)}
                           >
                             Start Call
                           </button>
                           <button 
                             type="button"
                             className="planner-btn planner-btn--secondary"
-                            onClick={() => handleAction(call.id, 'Demo: Marked as skipped')}
+                            onClick={() => handleAction(call.id, 'Marked as skipped')}
                           >
                             Mark as Skipped
                           </button>

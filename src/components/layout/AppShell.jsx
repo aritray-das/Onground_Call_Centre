@@ -10,6 +10,7 @@ import Practise from '../plan/Practise'
 import Calendar from '../calendar/Calendar'
 import PulseHome from '../pulse/PulseHome'
 import PulseChannel from '../pulse/PulseChannel'
+import CallPanel from '../calling/CallPanel'
 
 /**
  * AppShell
@@ -82,6 +83,9 @@ function AppShell() {
           )}
         </main>
       </div>
+
+      {/* ── Floating Voice Call Widget (Twilio Voice) ────────── */}
+      <CallPanel />
     </div>
   )
 }

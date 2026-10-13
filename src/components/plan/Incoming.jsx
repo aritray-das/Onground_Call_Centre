@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from 'react'
 import './Incoming.css'
 import { INCOMING_SUMMARY, INCOMING_CALLS } from '../../data/mockData'
 import { formatCurrency } from '../../utils/format'
@@ -9,23 +8,9 @@ import { formatCurrency } from '../../utils/format'
  * Planner view for incoming (missed) calls, ranked by expected value.
  */
 function Incoming() {
-  const [demoMessageId, setDemoMessageId] = useState(null)
-  const timeoutRef = useRef(null)
-
-  const handleCallback = (id) => {
-    setDemoMessageId(id)
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    
-    timeoutRef.current = setTimeout(() => {
-      setDemoMessageId(null)
-    }, 3000)
+  const handleCallback = (phone) => {
+    window.dispatchEvent(new CustomEvent('open-call-panel', { detail: { phone } }))
   }
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
-  }, [])
 
   // Sort rows by expected value, highest first
   const sortedCalls = [...INCOMING_CALLS].sort((a, b) => b.expectedValue - a.expectedValue)
@@ -75,25 +60,17 @@ function Incoming() {
               </div>
 
               <div className="incoming-card__actions">
-                {demoMessageId === call.id ? (
-                  <span className="incoming-card__demo-msg" role="status" aria-live="polite">
-                    Demo: No call placed
-                  </span>
-                ) : (
-                  <>
-                    <span className="incoming-card__expected-val">
-                      {formatCurrency(call.expectedValue)} expected
-                    </span>
-                    <button 
-                      type="button"
-                      className="incoming-btn incoming-btn--green"
-                      onClick={() => handleCallback(call.id)}
-                      aria-label={`Call back ${call.callerName}`}
-                    >
-                      Call back
-                    </button>
-                  </>
-                )}
+                <span className="incoming-card__expected-val">
+                  {formatCurrency(call.expectedValue)} expected
+                </span>
+                <button 
+                  type="button"
+                  className="incoming-btn incoming-btn--green"
+                  onClick={() => handleCallback(call.phone)}
+                  aria-label={`Call back ${call.callerName}`}
+                >
+                  Call back
+                </button>
               </div>
             </div>
           ))}

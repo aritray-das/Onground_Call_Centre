@@ -11,6 +11,10 @@ import { RECENT_CALLS } from '../../data/mockData'
 function Recent() {
   const [selectedId, setSelectedId] = useState(null)
 
+  const handleCall = (phone) => {
+    window.dispatchEvent(new CustomEvent('open-call-panel', { detail: { phone } }))
+  }
+
   const toggleSelect = (id) => {
     setSelectedId((prev) => (prev === id ? null : id))
   }
@@ -90,15 +94,26 @@ function Recent() {
                       No additional review details (like transcripts or recordings) are available in this demo.
                     </div>
 
-                    <button 
-                      className="recent-card__close-btn"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setSelectedId(null)
-                      }}
-                    >
-                      Close Review
-                    </button>
+                    <div className="recent-card__actions">
+                      <button 
+                        type="button"
+                        className="recent-btn recent-btn--call"
+                        onClick={() => handleCall(call.phone)}
+                        aria-label={`Call ${call.callerName}`}
+                      >
+                        Call
+                      </button>
+                      <button 
+                        type="button"
+                        className="recent-card__close-btn"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setSelectedId(null)
+                        }}
+                      >
+                        Close Review
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
