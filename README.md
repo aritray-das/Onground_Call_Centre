@@ -1,6 +1,6 @@
 # On-Ground.ai Call Centre
 
-A rebuild of the On-Ground.ai Call Centre app for The Sleep Company, frontend only, local sample data, no backend.
+A high-fidelity rebuild of the On-Ground.ai Call Centre app for The Sleep Company, featuring real Twilio WebRTC browser telephony, interactive AI voice customer simulation, Lucide iconography, and centralized sample data.
 
 ## Links
 
@@ -31,100 +31,161 @@ npm run build
 npm run preview
 ```
 
+### Environment Configuration (Optional — For Real Voice Telephony)
+To test real WebRTC voice dialing and the AI customer simulator locally or on Vercel, create a `.env.local` file with the following variables:
+
+```ini
+# Twilio Account & Voice SDK Credentials
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_API_KEY_SID=SKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_API_KEY_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_TWIML_APP_SID=APxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_CALLER_ID=+1xxxxxxxxxx
+
+# Security & Dialing Permissions
+DEMO_PASSCODE=your_secret_demo_passcode
+DEMO_ALLOWED_NUMBERS=+91xxxxxxxxxx,+1xxxxxxxxxx
+
+# Optional: Force all outbound PSTN calls to a specific test phone
+# DEMO_ROUTE_TO=+91xxxxxxxxxx
+```
+
+*Note: The frontend operates fully without Twilio credentials. When credentials are provided, the floating Call Panel connects directly to Twilio Voice.*
+
+---
+
 ## Stack and Why
 
 | Technology | Purpose & Rationale |
 | :--- | :--- |
-| **React 19 + Vite** | React preferred for declarative UI and modular state; Vite delivers fast HMR and instant static bundle builds. |
+| **React 19 + Vite** | React for declarative UI and modular state; Vite delivers rapid HMR and lightweight production builds. |
 | **Vanilla CSS** | Scoped component stylesheets (`*.css`) alongside design tokens in `src/index.css` for full control over typography, spacing, and micro-interactions without third-party CSS overhead. |
-| **State-Based Navigation** | Component switching managed via top-level state in `AppShell` with no router dependency (tradeoff: browser refresh returns to the Dashboard). |
-| **CSS Bar Charts** | Lightweight, 7-day volume and quality charts built with pure CSS and flexbox; eliminates external charting dependencies. |
+| **Twilio Voice SDK (`@twilio/voice-sdk`)** | WebRTC-based browser telephony enabling live outbound dialing, two-way audio, microphone mute toggling, DTMF tone sending, and call status lifecycle management. |
+| **Vercel Serverless Functions (`/api`)** | Lightweight Node.js serverless endpoints issuing short-lived HMAC-signed Twilio Access Tokens (`/api/token`) and serving dynamic TwiML response trees (`/api/voice`). |
+| **Lucide Icons (`lucide-react`)** | Crisp, scalable SVG icon set replacing raw emojis and character entities across the sidebar, navigation, metrics, buttons, and call actions. |
+| **Amazon Polly Neural Voice (`Polly.Aditi`) + Speech Recognition** | Interactive Indian English conversational voice agent powered by Twilio `<Gather input="speech">` allowing realistic spoken sales practice without telecom carrier restrictions. |
+| **CSS Bar Charts** | Lightweight 7-day volume and quality charts built with pure CSS and flexbox; eliminates external charting bundle size. |
 | **Centralized Mock Data** | Single source of truth at `src/data/mockData.js` representing The Sleep Company's products, leads, metrics, and calendar. |
+
+---
 
 ## What is Built
 
-### Required Features
-- **App Shell (`AppShell`, `Sidebar`, `TopBar`)**: Layout container Dark green sidebar with Dashboard, Plan (Calls to make, Incoming, Recent, Practise a call), Calendar and Pulse, plus a top bar.
-- **Top Bar & Profile Menu (`TopBar`)**: Displays notification count (3), streak and points indicator (⚡ 1,240 pts · 7d), and an avatar button ("AR") that opens a right-aligned profile card with agent information (`Arvind Rajan`, `Koramangala · The Sleep Company`), divider, and interactive options ("Avatar", "Settings", "Logout" in red). Selecting an item triggers a 2.5-second feedback toast at the bottom of the screen; handles outside clicks and the Escape key.
-- **Dashboard (`Dashboard`)**: Greeting banner ("Good evening, Arvind Rajan · The Sleep Company · Call Centre"), tight 4-KPI strip (76 calls, 4m 12s, 34%, 2), a green "MY PROGRESS · TODAY" card (3 Leads created, 2 Leads called), "Who's waiting" queue with colored time chips and an "Open planner" link, "My earnings this month" target tracker (₹5,200 / ₹10,000), dark brown/amber "My Tasks" card with task count badge and a clickable "2 hot leads" row, and two 7-day CSS bar charts with values above each bar and current-day highlights.
-- **Planned Outgoing Calls (`CallsToMake`)**: Top navy band ("Planner · Today's calling plan"), pagination (5 calls per page), intent score badges, expandable customer rows with rotating chevron indicators, and simulated action buttons ("Call", "Log outcome") with 3-second status messages.
-- **Incoming Calls (`Incoming`)**: Top navy band, page heading ranked by expected value descending, light summary strip ("5 MISSED TODAY" · "₹81,860 EXPECTED VALUE AT STAKE"), expected value displayed above a green "Call back" button, and simulated callback feedback ("Demo: No call placed").
-- **Recent Calls (`Recent`)**: Top navy band, call history list with expandable detail cards for reviewing call duration, outcome tags, and agent notes.
-- **Calendar (`Calendar`)**: Info banner, October 2026 month grid with navigation controls ("Prev", "Today", "Next") placed in the card header next to the month title, today cell (Oct 9) highlighted with a blue outline, event dots, and a day-detail inspector on the right.
-- **Pulse Home (`PulseHome`)**: Purple header with search input, AvaniBot card with "AGENTS ON" tag and demo response buttons ("Daily Brief", "Ask a question"), categorized agent lists (Custom Agents, Role Agents, Task Agents with percentage badges, General discussions), and an amber Kudos card with a "NEW" tag.
-- **Pulse Channel & Chat (`PulseChannel`)**: `#callcentre-team` channel with purple header and back navigation; pinned "Needs your input" card for confirming or rescheduling Priya Iyer's 4:30pm callback (answering via button or typed text resolves the card, clears the badge, and appends a response bubble from "You"); active conversation thread with Sunita Rao and "You"; functional chat input with auto-scrolling.
-- **Hot Leads Inspection Modal (`LeadsModal`)**: Accessible modal paging through 5 hot leads; displays progress dots, "Quote to be given to customer" strip, ICP Fit percentage bar, Lead Intent Score, and 3 collapsible sections open by default (ICP Fit Breakdown, How We Got Here, and Where We Picked Up Signals with financing, quotation, and warranty details); footer displays cumulative missed attempts with a manager warning badge.
+### 1. App Shell & Navigation
+- **Sidebar (`Sidebar.jsx`)**: Dark green sidebar with brand header and navigation items equipped with dedicated Lucide icons:
+  - **Dashboard**: `LayoutDashboard`
+  - **Plan**: `PhoneCall` with collapsible accordion chevron `ChevronRight`
+    - **Calls to make**: `PhoneOutgoing`
+    - **Incoming**: `PhoneIncoming`
+    - **Recent**: `Clock`
+    - **Practise a call**: `Headphones`
+  - **Calendar**: `Calendar`
+  - **Pulse**: `Activity`
+- **Mobile Responsive Drawer**: TopBar hamburger button (`Menu`) controls a sliding drawer on screens under 768px with touch backdrop dismissal.
+- **Top Bar & Profile Menu (`TopBar.jsx`)**: Displays notification badge (`Bell`), streak indicator (`Zap`), and an avatar button ("AR") opening a right-aligned profile card (`Arvind Rajan`, `Koramangala · The Sleep Company`) with interactive options (`Settings`, `LogOut`) triggering bottom toast notifications.
 
-### Bonus Features
-- **Send Channel Messages**: Functional message input in `#callcentre-team` with auto-scrolling and timestamp formatting.
-- **Needs-Your-Input Flow**: Interactive resolution flow for the pinned task card with visual feedback and dynamic state updates.
-- **Practise a Call Simulator (`Practise`)**: Dedicated practice simulator with 3 interactive sales scenarios for The Sleep Company (price objection, foam vs spring vs SmartGRID comparison, 100-night trial reassurance); 3 rebuttal options per scenario with immediate scoring (e.g., 96 / 100), coaching feedback, and an expandable talking-points accordion.
-- **Simulated Callback Actions**: Non-blocking simulated feedback triggers across outgoing, incoming, and recent call views without pretending to dial real phone numbers.
-- **Mobile Responsive Drawer Layout**: TopBar hamburger button controls a sliding drawer on screens under 768px with touch-friendly backdrop dismissal.
+### 2. Live In-App Telephony & AI Voice Customer
+- **Floating Call Widget (`CallPanel.jsx`, `useTwilioCall.js`)**:
+  - Global floating action button (FAB) with animated pulse indicator when a call is active.
+  - In-browser WebRTC audio connection via `@twilio/voice-sdk`.
+  - Passcode-authenticated token generation via `/api/token`.
+  - Active call timer, microphone mute/unmute toggle (`Mic` / `MicOff`), and hangup action (`PhoneOff`).
+  - **Twilio Trial DTMF Auto-Bypass**: Automatically transmits DTMF tone `1` upon connection and provides a dedicated `Press 1` (`Hash`) button to immediately dismiss Twilio trial account prompts.
+  - **Interactive AI Customer Persona (`AI-Customer`)**: Preset one-click dialer button connecting to an interactive Amazon Polly (`Polly.Aditi`) voice customer. Uses `<Gather input="speech">` to conduct multi-turn spoken dialogue about On-Ground.ai and The Sleep Company sales workflows.
+  - **Global Call Integration**: Clicking "Call" or "Call back" anywhere in the Planner, Incoming, or Recent lists auto-populates the customer's phone number into the dialer.
 
-## What I Skipped or Simplified
+### 3. Core Pages & Workflows
+- **Dashboard (`Dashboard.jsx`)**: Greeting banner ("Good evening, Arvind Rajan · The Sleep Company · Call Centre"), tight 4-KPI strip (76 calls, 4m 12s, 34%, 2), "MY PROGRESS · TODAY" tracker, "Who's waiting" queue with time chips, monthly earnings tracker (₹5,200 / ₹10,000), dark amber "My Tasks" card with clickable hot leads row, and two 7-day CSS bar charts with current-day highlights.
+- **Planned Outgoing Calls (`CallsToMake.jsx`)**: Today's calling plan with priority intent scores, expandable customer cards with chevron indicators, pagination controls, and direct "Start Call" buttons linking to the dialer.
+- **Incoming Missed Calls (`Incoming.jsx`)**: Ranked by expected monetary value descending with summary strip ("5 MISSED TODAY" · "₹81,860 EXPECTED VALUE AT STAKE") and quick "Call back" action buttons.
+- **Recent Calls History (`Recent.jsx`)**: Call logs with duration, outcome badges, agent notes, and instant redial triggers.
+- **Calendar (`Calendar.jsx`)**: October 2026 interactive month grid with navigation controls (`ChevronLeft` / `ChevronRight`), current-day highlight, event indicators, and day inspector panel.
+- **Hot Leads Inspection Modal (`LeadsModal.jsx`)**: 5 hot leads modal with progress paging, quote strip, ICP Fit percentage bar, Lead Intent Score, and collapsible breakdown sections (Financing, Quotation, Warranty signals) with manager warning badge.
+- **Pulse Community & AI Directory (`PulseHome.jsx`, `PulseChannel.jsx`)**: AvaniBot assistant card, kudos leaderboard, `#callcentre-team` channel with pinned callback resolution card, active thread conversation, and auto-scrolling chat composer.
+- **Practise a Call Simulator (`Practise.jsx`)**: 3 interactive sales scenarios for The Sleep Company (price objection, SmartGRID vs foam comparison, 100-night trial reassurance) with instant scoring (e.g., 96 / 100), coaching feedback, and talking points accordion.
 
-- **No Chart Library**: Bar charts are rendered with plain CSS and flexbox percentages rather than external dependencies like Recharts or Chart.js.
-- **No URL Routing**: Section navigation is managed in component state via `activeId`; refreshing the browser returns to the Dashboard.
-- **Session-Only State**: Newly sent Pulse messages, resolved task card states, and modal page index reset upon full page refresh.
-- **No External Telephony / Dialers**: "Call back" and "Call" buttons demonstrate local workflow feedback; no external calling service or WebRTC connection is attached.
-- **Sample Calendar Only**: Calendar events are fixed for October 2026 and do not integrate with Google Calendar or Outlook APIs.
-- **Decorative Elements Omitted**: The floating dial button and the DEMO strip were not built, because the brief marks them optional.
-- **Static top-bar values**: the notification count, points and streak do not change with activity.
+---
+
+## Technical Notes & Telecom Considerations
+
+- **Indian Carrier (PSTN) Regulations**: Twilio Free Trial accounts forbid bridging outbound calls to Indian PSTN phone numbers (`+91`) without an upgraded Twilio project and local regulatory (TRAI) enterprise verification.
+- **Voice Testing Solution**: To ensure full voice review without telephony billing barriers, the application includes the **AI Customer Persona (`AI-Customer`)**, which routes over pure browser WebRTC through Amazon Polly neural voice and Twilio speech recognition `<Gather>`, delivering two-way verbal dialogue.
+- **Twilio Trial DTMF Prompt**: On Twilio trial accounts, Twilio injects a mandatory verbal prompt ("Press any key to execute your code"). The client app auto-sends DTMF `1` via `call.sendDigits('1')` upon connection and provides a manual `Press 1` button in `CallPanel.jsx`.
+- **CSS Bar Charts**: Volume and quality charts are rendered with pure CSS flexbox percentages, keeping bundle size minimal and zero-dependency.
+- **State-Based Navigation**: Section routing is managed in component state via `activeId` in `AppShell` with clean separation of concerns.
+
+---
 
 ## Project Structure
 
 ```
-src/
-├── App.jsx                     # Top-level application component mounting AppShell
-├── index.css                   # Global CSS design tokens (colors, typography, spacing) and resets
-├── main.jsx                    # React entry point mounting App to DOM
-├── components/
-│   ├── calendar/
-│   │   ├── Calendar.jsx        # October 2026 interactive scheduling grid and event detail panel
-│   │   └── Calendar.css        # Scoped styles for Calendar
-│   ├── dashboard/
-│   │   ├── Dashboard.jsx       # Overview screen: KPIs, progress, waitlist, tasks, and 7-day charts
-│   │   └── Dashboard.css       # Scoped styles for Dashboard
-│   ├── layout/
-│   │   ├── AppShell.jsx        # Root application layout managing active page state and mobile drawer
-│   │   ├── AppShell.css        # Scoped styles for AppShell
-│   │   ├── Sidebar.jsx         # Left navigation sidebar with category sections and badge counts
-│   │   ├── Sidebar.css         # Scoped styles for Sidebar
-│   │   ├── TopBar.jsx          # Top application bar with streak, points, notifications, and profile menu
-│   │   └── TopBar.css          # Scoped styles for TopBar and dropdown
-│   ├── leads/
-│   │   ├── LeadsModal.jsx      # Modal inspecting 5 hot leads with paging, signals, and ICP breakdown
-│   │   └── LeadsModal.css      # Scoped styles for LeadsModal
-│   ├── plan/
-│   │   ├── CallsToMake.jsx     # Outgoing call planner with priority scoring, paging, and expansion
-│   │   ├── CallsToMake.css     # Scoped styles for CallsToMake
-│   │   ├── Incoming.jsx        # Missed calls list ranked by expected monetary value
-│   │   ├── Incoming.css        # Scoped styles for Incoming
-│   │   ├── Practise.jsx        # Objection handling simulator with 3 mattress sales scenarios and scoring
-│   │   ├── Practise.css        # Scoped styles for Practise
-│   │   ├── Recent.jsx          # Call history with expandable call review and outcome tags
-│   │   └── Recent.css          # Scoped styles for Recent
-│   └── pulse/
-│       ├── PulseHome.jsx       # Knowledge & agent directory with AvaniBot card and categorized channels
-│       ├── PulseHome.css       # Scoped styles for PulseHome
-│       ├── PulseChannel.jsx    # #callcentre-team channel with pinned callback resolution card and chat
-│       └── PulseChannel.css    # Scoped styles for PulseChannel
-├── data/
-│   └── mockData.js             # Centralized local mock data for agent, leads, calls, charts, and pulse
-└── utils/
-    └── format.js               # Currency formatting utility (INR format)
+├── api/
+│   ├── token.js                # Vercel serverless function: issues Twilio Voice Access Tokens
+│   └── voice.js                # Vercel serverless function: TwiML webhook (AI customer & PSTN dialer)
+├── src/
+│   ├── App.jsx                 # Top-level application component mounting AppShell
+│   ├── index.css               # Design tokens (colors, typography, spacing) and resets
+│   ├── main.jsx                # React entry point mounting App to DOM
+│   ├── components/
+│   │   ├── calendar/
+│   │   │   ├── Calendar.jsx    # October 2026 scheduling grid and event detail panel
+│   │   │   └── Calendar.css    # Scoped styles for Calendar
+│   │   ├── calling/
+│   │   │   ├── CallPanel.jsx   # Floating WebRTC phone dialer and active call controller
+│   │   │   └── CallPanel.css   # Scoped styles for CallPanel widget
+│   │   ├── dashboard/
+│   │   │   ├── Dashboard.jsx   # Overview screen: KPIs, progress, waitlist, tasks, and charts
+│   │   │   └── Dashboard.css   # Scoped styles for Dashboard
+│   │   ├── layout/
+│   │   │   ├── AppShell.jsx    # Root application layout managing active page state
+│   │   │   ├── AppShell.css    # Scoped styles for AppShell
+│   │   │   ├── Sidebar.jsx     # Navigation sidebar with Lucide icons and category accordion
+│   │   │   ├── Sidebar.css     # Scoped styles for Sidebar
+│   │   │   ├── TopBar.jsx      # Top application bar with streak, notifications, and profile menu
+│   │   │   └── TopBar.css      # Scoped styles for TopBar
+│   │   ├── leads/
+│   │   │   ├── LeadsModal.jsx  # Modal inspecting 5 hot leads with ICP breakdown and signals
+│   │   │   └── LeadsModal.css  # Scoped styles for LeadsModal
+│   │   ├── plan/
+│   │   │   ├── CallsToMake.jsx # Outgoing call planner with priority scoring and dialer trigger
+│   │   │   ├── CallsToMake.css # Scoped styles for CallsToMake
+│   │   │   ├── Incoming.jsx    # Missed calls list ranked by expected monetary value
+│   │   │   ├── Incoming.css    # Scoped styles for Incoming
+│   │   │   ├── Practise.jsx    # Objection handling simulator with mattress sales scenarios
+│   │   │   ├── Practise.css    # Scoped styles for Practise
+│   │   │   ├── Recent.jsx      # Call history with expandable review and outcome tags
+│   │   │   └── Recent.css      # Scoped styles for Recent
+│   │   └── pulse/
+│   │       ├── PulseHome.jsx   # Knowledge & agent directory with AvaniBot card
+│   │       ├── PulseHome.css   # Scoped styles for PulseHome
+│   │       ├── PulseChannel.jsx# #callcentre-team channel with task card and chat thread
+│   │       └── PulseChannel.css# Scoped styles for PulseChannel
+│   ├── data/
+│   │   └── mockData.js         # Centralized mock data for agent, leads, calls, charts, and pulse
+│   ├── hooks/
+│   │   └── useTwilioCall.js    # Custom React hook for Twilio Device and WebRTC call lifecycle
+│   └── utils/
+│       └── format.js           # Currency formatting utility (INR format)
+├── package.json
+└── README.md
 ```
+
+---
 
 ## AI Tools Used
 
-Google Antigravity (Gemini agent): scaffolding, component drafts, applying design changes. Claude: planning against the assignment PDF, drafting the prompts given to Antigravity, reviewing progress, and drafting this README. I ran lint and build after each step, checked each screen against the PDF screenshots, and committed step by step.
+Google Antigravity (Gemini agent): scaffolding, component drafts, applying design changes, Twilio Voice SDK integration, serverless function implementation, and Lucide icon migration. Claude: planning against the assignment requirements, reviewing progress, and drafting documentation. Lint and build checks were run after each step.
+
+---
 
 ## Note on the Mock
 
-I viewed the mock in the browser to see hover, click and scroll behaviour. I did not save, copy or inspect its source code; all code in this repository is my own. Sample names and numbers (leads, missed calls, earnings) come from what the assignment PDF shows. Everything else is my own sample data.
+I viewed the mock in the browser to examine hover, click, and scroll behaviour. I did not save, copy, or inspect its source code; all code in this repository is original. Sample names and metrics (leads, missed calls, earnings) reflect what the assignment displays. All other information is custom sample data.
+
+---
 
 ## Verification
 
 - **Lint (`npm run lint`)**: Passed with 0 errors and 0 warnings.
-- **Build (`npm run build`)**: Vite production bundle compiled cleanly in under 500ms with 0 errors.
+- **Build (`npm run build`)**: Vite production bundle compiled cleanly in under 1.6s with 0 errors.
